@@ -1,0 +1,42 @@
+<!-- Hamburger Menu Button -->
+<button 
+  class="menu-button"
+  (click)="toggleMenu()"
+  [attr.aria-expanded]="isOpen()"
+  aria-label="Toggle menu"
+  type="button"
+>
+  <span class="hamburger" [class.active]="isOpen()">
+    <span class="line"></span>
+    <span class="line"></span>
+    <span class="line"></span>
+  </span>
+</button>
+
+<!-- Overlay -->
+@if (isOpen()) {
+  <div class="overlay" (click)="closeMenu()"></div>
+}
+
+<!-- Sidebar Menu -->
+<nav class="sidebar" [class.open]="isOpen()">
+  <div class="menu-header">
+    <h2>Menu</h2>
+  </div>
+  
+  <ul class="menu-list">
+    @for (item of menuItems; track item.route) {
+      <li class="menu-item">
+        <a 
+          [routerLink]="item.route"
+          (click)="closeMenu()"
+          class="menu-link"
+          [attr.aria-label]="item.label"
+        >
+          <span class="menu-icon">{{ item.icon }}</span>
+          <span class="menu-label">{{ item.label }}</span>
+        </a>
+      </li>
+    }
+  </ul>
+</nav>
