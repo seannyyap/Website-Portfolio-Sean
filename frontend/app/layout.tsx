@@ -1,11 +1,11 @@
 import type { Metadata, Viewport } from 'next'
-import { Outfit, JetBrains_Mono } from 'next/font/google'
+import { Inter, JetBrains_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
-const outfit = Outfit({ 
+const inter = Inter({ 
   subsets: ["latin"],
-  variable: '--font-outfit'
+  variable: '--font-inter'
 });
 
 const jetbrainsMono = JetBrains_Mono({ 
@@ -44,7 +44,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${outfit.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <body className="font-sans antialiased bg-background text-foreground relative">
         <Noise />
         {children}

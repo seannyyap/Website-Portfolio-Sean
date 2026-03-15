@@ -44,7 +44,7 @@ export function MagneticButton({
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      style={{ x, y }}
+      style={{ x, y, willChange: "transform" }}
       className={`relative inline-block ${className}`}
       {...props}
     >

@@ -1,7 +1,7 @@
 "use client"
 
 import { motion, useScroll, useTransform, useSpring } from "framer-motion"
-import { useRef } from "react"
+import { useRef, useState, useEffect } from "react"
 
 interface Milestone {
   _id: string
@@ -58,6 +58,21 @@ const defaultMilestones = [
 export function Experience({ milestones = [] }: ExperienceProps) {
   const containerRef = useRef(null)
   const displayMilestones = milestones.length > 0 ? milestones : defaultMilestones
+  const [petals, setPetals] = useState<{ id: number; size: number; left: string; top: string; duration: number; delay: number; rotate: number }[]>([])
+
+  useEffect(() => {
+    // Generate petals for the experience section
+    const newPetals = [...Array(12)].map((_, i) => ({
+      id: i,
+      size: Math.random() * 6 + 4,
+      left: Math.random() * 100 + "%",
+      top: Math.random() * 100 + "%",
+      duration: Math.random() * 8 + 12,
+      delay: Math.random() * 5,
+      rotate: Math.random() * 360
+    }))
+    setPetals(newPetals)
+  }, [])
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -70,59 +85,71 @@ export function Experience({ milestones = [] }: ExperienceProps) {
     restDelta: 0.001
   })
 
-  // Desktop Path and Card Mappings
-  const trunkProgress = useTransform(smoothProgress, [0, 1], [0, 1])
-  const trunkOpacity = useTransform(smoothProgress, [0, 0.01], [0, 1])
+  // Desktop Path and Card Mappings - Synchronized for organic growth
+  // Trunk reaches B0 point (~25%) at scroll 0.2
+  // Trunk reaches B1 point (~45%) at scroll 0.35
+  // Trunk reaches B2 point (~85%) at scroll 0.7
+  // Trunk reaches B3/4 point (~100%) at scroll 0.85
   
-  const b0Progress = useTransform(smoothProgress, [0.05, 0.2], [0, 1])
-  const b0Opacity = useTransform(smoothProgress, [0.05, 0.06], [0, 1])
+  const trunkProgress = useTransform(smoothProgress, [0, 0.85], [0, 1])
+  const trunkOpacity = useTransform(smoothProgress, [0, 0.05], [0, 1])
+  
+  // Branches only grow once the trunk reaches them
+  const b0Progress = useTransform(smoothProgress, [0.22, 0.35], [0, 1])
+  const b0Opacity = useTransform(smoothProgress, [0.22, 0.23], [0, 1])
 
-  const b1Progress = useTransform(smoothProgress, [0.25, 0.4], [0, 1])
-  const b1Opacity = useTransform(smoothProgress, [0.25, 0.26], [0, 1])
+  const b1Progress = useTransform(smoothProgress, [0.38, 0.52], [0, 1])
+  const b1Opacity = useTransform(smoothProgress, [0.38, 0.39], [0, 1])
 
-  const b2Progress = useTransform(smoothProgress, [0.45, 0.6], [0, 1])
-  const b2Opacity = useTransform(smoothProgress, [0.45, 0.46], [0, 1])
+  const b2Progress = useTransform(smoothProgress, [0.72, 0.85], [0, 1])
+  const b2Opacity = useTransform(smoothProgress, [0.72, 0.73], [0, 1])
 
-  const b3Progress = useTransform(smoothProgress, [0.65, 0.8], [0, 1])
-  const b3Opacity = useTransform(smoothProgress, [0.65, 0.66], [0, 1])
+  const b3Progress = useTransform(smoothProgress, [0.85, 0.95], [0, 1])
+  const b3Opacity = useTransform(smoothProgress, [0.85, 0.86], [0, 1])
 
-  const b4Progress = useTransform(smoothProgress, [0.85, 1.0], [0, 1])
-  const b4Opacity = useTransform(smoothProgress, [0.85, 0.86], [0, 1])
+  const b4Progress = useTransform(smoothProgress, [0.88, 1.0], [0, 1])
+  const b4Opacity = useTransform(smoothProgress, [0.88, 0.89], [0, 1])
 
-  const card0Opacity = useTransform(smoothProgress, [0.15, 0.25], [0, 1])
-  const card1Opacity = useTransform(smoothProgress, [0.35, 0.45], [0, 1])
-  const card2Opacity = useTransform(smoothProgress, [0.55, 0.65], [0, 1])
-  const card3Opacity = useTransform(smoothProgress, [0.75, 0.85], [0, 1])
-  const card4Opacity = useTransform(smoothProgress, [0.95, 1.0], [0, 1])
+  // Cards appear once branches are almost fully grown
+  const card0Opacity = useTransform(smoothProgress, [0.3, 0.4], [0, 1])
+  const card1Opacity = useTransform(smoothProgress, [0.48, 0.58], [0, 1])
+  const card2Opacity = useTransform(smoothProgress, [0.8, 0.9], [0, 1])
+  const card3Opacity = useTransform(smoothProgress, [0.92, 0.98], [0, 1])
+  const card4Opacity = useTransform(smoothProgress, [0.98, 1.0], [0, 1])
 
-  const card0Scale = useTransform(smoothProgress, [0.15, 0.25], [0.9, 1])
-  const card1Scale = useTransform(smoothProgress, [0.35, 0.45], [0.9, 1])
-  const card2Scale = useTransform(smoothProgress, [0.55, 0.65], [0.9, 1])
-  const card3Scale = useTransform(smoothProgress, [0.75, 0.85], [0.9, 1])
-  const card4Scale = useTransform(smoothProgress, [0.95, 1.0], [0.9, 1])
+  const card0Scale = useTransform(smoothProgress, [0.3, 0.4], [0.9, 1])
+  const card1Scale = useTransform(smoothProgress, [0.48, 0.58], [0.9, 1])
+  const card2Scale = useTransform(smoothProgress, [0.8, 0.9], [0.9, 1])
+  const card3Scale = useTransform(smoothProgress, [0.92, 0.98], [0.9, 1])
+  const card4Scale = useTransform(smoothProgress, [0.98, 1.0], [0.9, 1])
 
-  const MilestoneCard = ({ milestone, index, style, className }: any) => (
+  const MilestoneCard = ({ milestone, index, style, className, side = "left", ...props }: any) => (
     <motion.div 
        style={style}
-       className={`bg-card/40 backdrop-blur-2xl border border-border/30 p-6 lg:p-8 rounded-[2rem] shadow-sm hover:border-primary/20 transition-colors duration-700 ${className}`}
+       className={`bg-card/30 backdrop-blur-3xl border-[0.5px] border-border/20 p-6 lg:p-8 rounded-[2.5rem] shadow-2xl hover:border-primary/40 transition-all duration-700 group relative ${className}`}
+       {...props}
     >
-       <div className="flex items-center gap-4 mb-4">
-          <span className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-medium text-xs">
-            0{index + 1}
-          </span>
-          <span className="text-xs font-mono text-primary tracking-widest uppercase">
+       {/* Connection Node - Targeted precisely at the edge */}
+       <div className={`absolute top-1/2 ${side === 'left' ? '-right-[1.5px]' : '-left-[1.5px]'} -translate-y-1/2 w-6 h-6 rounded-full bg-primary/20 blur-lg group-hover:bg-primary/50 transition-colors pointer-events-none`} />
+       <div className={`absolute top-1/2 ${side === 'left' ? 'right-0 translate-x-1/2' : 'left-0 -translate-x-1/2'} -translate-y-1/2 w-3 h-3 rounded-full bg-primary ring-4 ring-primary/30 group-hover:scale-150 transition-all pointer-events-none shadow-[0_0_15px_rgba(var(--primary),0.5)]`} />
+
+       <div className="flex items-center gap-4 mb-5">
+          <div className="w-10 h-10 rounded-2xl bg-primary/5 border border-primary/10 flex items-center justify-center text-primary font-bold text-sm shadow-inner group-hover:border-primary/30 transition-colors">
+            {index + 1}
+          </div>
+          <span className="text-xs font-mono text-primary/70 tracking-[0.2em] uppercase font-semibold">
             {milestone.year || milestone.period}
           </span>
        </div>
-       <h3 className="text-xl font-medium text-foreground mb-4 leading-tight">
+       <h3 className="text-2xl font-bold text-foreground mb-4 leading-tight tracking-tight group-hover:text-primary transition-colors duration-500">
          {milestone.title}
        </h3>
-       <p className="text-muted-foreground leading-loose text-sm mb-6">
+       <p className="text-muted-foreground/90 leading-relaxed text-sm lg:text-base mb-8 font-medium">
          {milestone.description}
        </p>
-       <div className="flex flex-wrap gap-2 mt-auto">
+       <div className="flex flex-wrap gap-2.5 mt-auto">
           {(milestone.tags || milestone.technologies)?.map((tag: string) => (
-            <span key={tag} className="px-3 py-1 text-[10px] font-mono bg-secondary/50 text-secondary-foreground rounded-full border border-border/40 tracking-wide">
+            <span key={tag} className="px-4 py-1.5 text-[10px] font-bold font-mono bg-primary/5 text-primary/80 rounded-full border border-primary/10 tracking-widest uppercase transition-all hover:bg-primary/20 hover:text-primary hover:scale-105">
               {tag}
             </span>
           ))}
@@ -139,7 +166,37 @@ export function Experience({ milestones = [] }: ExperienceProps) {
       <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden">
         
         {/* Subtle background overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/90 to-primary/5 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-primary/10 pointer-events-none" />
+
+        {/* Environmental Particles - Drifting Petals */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          {petals.map((petal) => (
+            <motion.div
+              key={`petal-${petal.id}`}
+              className="absolute rounded-full bg-primary/15 blur-[1px]"
+              style={{
+                width: petal.size + "px",
+                height: petal.size * 1.5 + "px", // Elongated leaf shape
+                left: petal.left,
+                top: petal.top,
+                rotate: petal.rotate,
+                willChange: "transform, opacity"
+              }}
+              animate={{
+                y: [0, -150],
+                x: [0, Math.random() * 40 - 20],
+                opacity: [0, 0.4, 0],
+                rotate: [petal.rotate, petal.rotate + 45]
+              }}
+              transition={{
+                duration: petal.duration,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: petal.delay
+              }}
+            />
+          ))}
+        </div>
 
         {/* Title */}
         <div className="z-20 relative text-center mt-24 mb-16 lg:mb-0 lg:absolute lg:top-16 lg:left-1/2 lg:-translate-x-1/2 pointer-events-none">
@@ -156,13 +213,17 @@ export function Experience({ milestones = [] }: ExperienceProps) {
             ========================================= */}
         <div className="lg:hidden absolute inset-0 w-full h-full flex items-center justify-center z-0 pt-32">
            <div className="w-[300px] h-[400px] opacity-20 relative -translate-y-[10vh]">
-              <svg viewBox="0 0 400 500" fill="none" className="w-full h-full text-primary">
-                 <motion.path d="M200,480 C180,450 190,400 200,350 C210,300 180,250 170,200" stroke="currentColor" strokeWidth="8" strokeLinecap="round" style={{ pathLength: trunkProgress, opacity: trunkOpacity }} />
-                 <motion.path d="M190,400 C150,400 100,380 60,420" stroke="currentColor" strokeWidth="6" strokeLinecap="round" style={{ pathLength: b0Progress, opacity: b0Opacity }} />
-                 <motion.path d="M200,350 C240,330 280,360 350,320" stroke="currentColor" strokeWidth="6" strokeLinecap="round" style={{ pathLength: b1Progress, opacity: b1Opacity }} />
-                 <motion.path d="M175,230 C130,220 80,250 40,180" stroke="currentColor" strokeWidth="5" strokeLinecap="round" style={{ pathLength: b2Progress, opacity: b2Opacity }} />
-                 <motion.path d="M170,200 C190,150 240,140 320,80" stroke="currentColor" strokeWidth="5" strokeLinecap="round" style={{ pathLength: b3Progress, opacity: b3Opacity }} />
-                 <motion.path d="M170,200 C150,150 140,100 120,20" stroke="currentColor" strokeWidth="4" strokeLinecap="round" style={{ pathLength: b4Progress, opacity: b4Opacity }} />
+              <svg viewBox="0 0 400 500" fill="none" className="w-full h-full">
+                 <g className="text-primary" style={{ willChange: "transform, opacity" }}>
+                    <motion.path d="M200,480 C180,450 190,400 200,350 C210,300 180,250 170,200" stroke="currentColor" strokeWidth="8" strokeLinecap="round" style={{ pathLength: trunkProgress, opacity: trunkOpacity }} />
+                    <motion.path d="M200,350 C190,300 180,250 170,200" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.4" style={{ pathLength: trunkProgress }} />
+                    
+                    <motion.path d="M190,400 C150,400 100,380 60,420" stroke="currentColor" strokeWidth="6" strokeLinecap="round" style={{ pathLength: b0Progress, opacity: b0Opacity }} />
+                    <motion.path d="M200,350 C240,330 280,360 350,320" stroke="currentColor" strokeWidth="6" strokeLinecap="round" style={{ pathLength: b1Progress, opacity: b1Opacity }} />
+                    <motion.path d="M175,230 C130,220 80,250 40,180" stroke="currentColor" strokeWidth="5" strokeLinecap="round" style={{ pathLength: b2Progress, opacity: b2Opacity }} />
+                    <motion.path d="M170,200 C190,150 240,140 320,80" stroke="currentColor" strokeWidth="5" strokeLinecap="round" style={{ pathLength: b3Progress, opacity: b3Opacity }} />
+                    <motion.path d="M170,200 C150,150 140,100 120,20" stroke="currentColor" strokeWidth="4" strokeLinecap="round" style={{ pathLength: b4Progress, opacity: b4Opacity }} />
+                 </g>
               </svg>
            </div>
         </div>
@@ -179,49 +240,112 @@ export function Experience({ milestones = [] }: ExperienceProps) {
             ========================================= */}
         <div className="hidden lg:block absolute inset-0 w-full h-full max-w-[1200px] mx-auto pointer-events-none">
            {/* The SVG Tree in the center */}
-           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[500px]">
-              <svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full text-primary">
-                 <motion.path d="M200,480 C180,450 190,400 200,350 C210,300 180,250 170,200" stroke="currentColor" strokeWidth="8" strokeLinecap="round" style={{ pathLength: trunkProgress, opacity: trunkOpacity }} />
-                 <motion.path d="M190,400 C150,400 100,380 60,420" stroke="currentColor" strokeWidth="6" strokeLinecap="round" style={{ pathLength: b0Progress, opacity: b0Opacity }} />
-                 <motion.path d="M200,350 C240,330 280,360 350,320" stroke="currentColor" strokeWidth="6" strokeLinecap="round" style={{ pathLength: b1Progress, opacity: b1Opacity }} />
-                 <motion.path d="M175,230 C130,220 80,250 40,180" stroke="currentColor" strokeWidth="5" strokeLinecap="round" style={{ pathLength: b2Progress, opacity: b2Opacity }} />
-                 <motion.path d="M170,200 C190,150 240,140 320,80" stroke="currentColor" strokeWidth="5" strokeLinecap="round" style={{ pathLength: b3Progress, opacity: b3Opacity }} />
-                 <motion.path d="M170,200 C150,150 140,100 120,20" stroke="currentColor" strokeWidth="4" strokeLinecap="round" style={{ pathLength: b4Progress, opacity: b4Opacity }} />
+           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[750px]">
+              <div className="absolute inset-0 bg-primary/5 blur-[100px] rounded-full scale-150 animate-pulse" />
+              <svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full overflow-visible">
+                 <g className="text-primary" style={{ willChange: "transform" }}>
+                    {/* Main Trunk with texture */}
+                    <motion.path d="M200,480 C180,450 190,400 200,350 C210,300 180,250 170,200" stroke="currentColor" strokeWidth="12" strokeLinecap="round" style={{ pathLength: trunkProgress, opacity: trunkOpacity }} />
+                    <motion.path d="M195,470 C180,440 195,390 205,340" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.3" style={{ pathLength: trunkProgress }} />
+                    <motion.path d="M205,475 C190,445 185,395 195,345" stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity="0.2" style={{ pathLength: trunkProgress }} />
+                    
+                    {/* Primary Branches - Only grow if milestone data exists */}
+                    {displayMilestones[0] && (
+                      <>
+                        <motion.path d="M190,400 C150,400 100,380 60,420" stroke="currentColor" strokeWidth="8" strokeLinecap="round" style={{ pathLength: b0Progress, opacity: b0Opacity }} />
+                        <motion.circle cx="60" cy="420" r="10" fill="currentColor" opacity="0.15" style={{ scale: card0Opacity }} />
+                        <motion.circle cx="60" cy="420" r="4" fill="currentColor" style={{ scale: card0Opacity }} />
+                      </>
+                    )}
+                    {displayMilestones[1] && (
+                      <>
+                        <motion.path d="M200,350 C240,330 280,360 350,320" stroke="currentColor" strokeWidth="8" strokeLinecap="round" style={{ pathLength: b1Progress, opacity: b1Opacity }} />
+                        <motion.circle cx="350" cy="320" r="12" fill="currentColor" opacity="0.15" style={{ scale: card1Opacity }} />
+                        <motion.circle cx="350" cy="320" r="5" fill="currentColor" style={{ scale: card1Opacity }} />
+                      </>
+                    )}
+                    {displayMilestones[2] && (
+                      <>
+                        <motion.path d="M175,230 C130,220 80,250 40,180" stroke="currentColor" strokeWidth="7" strokeLinecap="round" style={{ pathLength: b2Progress, opacity: b2Opacity }} />
+                        <motion.circle cx="40" cy="180" r="10" fill="currentColor" opacity="0.15" style={{ scale: card2Opacity }} />
+                        <motion.circle cx="40" cy="180" r="4" fill="currentColor" style={{ scale: card2Opacity }} />
+                      </>
+                    )}
+                    {displayMilestones[3] && (
+                      <>
+                        <motion.path d="M170,200 C190,150 240,140 320,80" stroke="currentColor" strokeWidth="7" strokeLinecap="round" style={{ pathLength: b3Progress, opacity: b3Opacity }} />
+                        <motion.circle cx="320" cy="80" r="12" fill="currentColor" opacity="0.15" style={{ scale: card3Opacity }} />
+                        <motion.circle cx="320" cy="80" r="5" fill="currentColor" style={{ scale: card3Opacity }} />
+                      </>
+                    )}
+                    {displayMilestones[4] && (
+                      <>
+                        <motion.path d="M170,200 C150,150 140,100 120,20" stroke="currentColor" strokeWidth="6" strokeLinecap="round" style={{ pathLength: b4Progress, opacity: b4Opacity }} />
+                        <motion.circle cx="120" cy="20" r="15" fill="currentColor" opacity="0.15" style={{ scale: card4Opacity }} />
+                        <motion.circle cx="120" cy="20" r="6" fill="currentColor" style={{ scale: card4Opacity }} />
+                      </>
+                    )}
+                 </g>
               </svg>
            </div>
 
-           {/* The Container for Absolute Cards */}
-           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[500px]">
-              {/* M0: End at (60, 420) -> ~15% left, 84% top */}
-              <MilestoneCard 
-                 milestone={displayMilestones[0]} index={0} 
-                 style={{ opacity: card0Opacity, scale: card0Scale }}
-                 className="absolute top-[84%] right-[85%] w-[260px] xl:w-[320px] -translate-y-1/2 mr-4 origin-right pointer-events-auto"
-              />
-              {/* M1: End at (350, 320) -> ~87.5% left, 64% top */}
-              <MilestoneCard 
-                 milestone={displayMilestones[1]} index={1} 
-                 style={{ opacity: card1Opacity, scale: card1Scale }}
-                 className="absolute top-[64%] left-[87.5%] w-[260px] xl:w-[320px] -translate-y-1/2 ml-4 origin-left pointer-events-auto"
-              />
-              {/* M2: End at (40, 180) -> ~10% left, 36% top */}
-              <MilestoneCard 
-                 milestone={displayMilestones[2]} index={2} 
-                 style={{ opacity: card2Opacity, scale: card2Scale }}
-                 className="absolute top-[36%] right-[90%] w-[260px] xl:w-[320px] -translate-y-1/2 mr-4 origin-right pointer-events-auto"
-              />
-              {/* M3: End at (320, 80) -> ~80% left, 16% top */}
-              <MilestoneCard 
-                 milestone={displayMilestones[3]} index={3} 
-                 style={{ opacity: card3Opacity, scale: card3Scale }}
-                 className="absolute top-[16%] left-[80%] w-[260px] xl:w-[320px] -translate-y-1/2 ml-4 origin-left pointer-events-auto"
-              />
-              {/* M4: End at (120, 20) -> ~30% left, 4% top */}
-              <MilestoneCard 
-                 milestone={displayMilestones[4]} index={4} 
-                 style={{ opacity: card4Opacity, scale: card4Scale }}
-                 className="absolute top-[4%] right-[70%] w-[260px] xl:w-[320px] -translate-y-1/2 mr-4 origin-bottom-right pointer-events-auto"
-              />
+           {/* The Container for Absolute Cards - Sync with SVG box for perfect alignment */}
+           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[750px] pointer-events-none">
+              {/* M0: Year 1 (Left) - (60, 420) -> 15% left, 84% top */}
+              {displayMilestones[0] && (
+                <MilestoneCard 
+                   milestone={displayMilestones[0]} index={0} 
+                   style={{ opacity: card0Opacity, scale: card0Scale }}
+                   initial={{ left: "15%", top: "84%", x: "-100%", y: "-50%" }}
+                   animate={{ left: "15%", top: "84%", x: "-100%", y: "-50%" }}
+                   side="left"
+                   className="absolute w-[280px] xl:w-[350px] origin-right pointer-events-auto"
+                />
+              )}
+              {/* M1: Year 2 (Right) - (350, 320) -> 87.5% left, 64% top */}
+              {displayMilestones[1] && (
+                <MilestoneCard 
+                   milestone={displayMilestones[1]} index={1} 
+                   style={{ opacity: card1Opacity, scale: card1Scale }}
+                   initial={{ left: "87.5%", top: "64%", x: "0%", y: "-50%" }}
+                   animate={{ left: "87.5%", top: "64%", x: "0%", y: "-50%" }}
+                   side="right"
+                   className="absolute w-[280px] xl:w-[350px] origin-left pointer-events-auto"
+                />
+              )}
+              {/* M2: Year 3 (Left) - (40, 180) -> 10% left, 36% top */}
+              {displayMilestones[2] && (
+                <MilestoneCard 
+                   milestone={displayMilestones[2]} index={2} 
+                   style={{ opacity: card2Opacity, scale: card2Scale }}
+                   initial={{ left: "10%", top: "36%", x: "-100%", y: "-50%" }}
+                   animate={{ left: "10%", top: "36%", x: "-100%", y: "-50%" }}
+                   side="left"
+                   className="absolute w-[280px] xl:w-[350px] origin-right pointer-events-auto"
+                />
+              )}
+              {/* M3: Year 4 (Right) - (320, 80) -> 80% left, 16% top */}
+              {displayMilestones[3] && (
+                <MilestoneCard 
+                   milestone={displayMilestones[3]} index={3} 
+                   style={{ opacity: card3Opacity, scale: card3Scale }}
+                   initial={{ left: "80%", top: "16%", x: "0%", y: "-50%" }}
+                   animate={{ left: "80%", top: "16%", x: "0%", y: "-50%" }}
+                   side="right"
+                   className="absolute w-[280px] xl:w-[350px] origin-left pointer-events-auto"
+                />
+              )}
+              {/* M4: Present (Left) - (120, 20) -> 30% left, 4% top */}
+              {displayMilestones[4] && (
+                <MilestoneCard 
+                   milestone={displayMilestones[4]} index={4} 
+                   style={{ opacity: card4Opacity, scale: card4Scale }}
+                   initial={{ left: "30%", top: "4%", x: "-100%", y: "-50%" }}
+                   animate={{ left: "30%", top: "4%", x: "-100%", y: "-50%" }}
+                   side="left"
+                   className="absolute w-[280px] xl:w-[350px] origin-right pointer-events-auto"
+                />
+              )}
            </div>
         </div>
       </div>

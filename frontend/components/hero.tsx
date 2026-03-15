@@ -1,69 +1,142 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { motion, useScroll, useTransform, AnimatePresence, useSpring, useMotionValue } from "framer-motion"
 import { ArrowDown, Github, Linkedin, Twitter } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
 import { MagneticButton } from "./ui/magnetic-button"
 
 const words = ["AI Applications", "Mindful Code", "Digital Harmony", "The Future"]
 
 export function Hero() {
   const [currentWord, setCurrentWord] = useState(0)
+  const [motes, setMotes] = useState<{ id: number; size: number; left: string; top: string; duration: number; delay: number }[]>([])
+  const { scrollY } = useScroll()
+  
+  // Mouse parallax motion values
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+  const springX = useSpring(mouseX, { stiffness: 100, damping: 30 })
+  const springY = useSpring(mouseY, { stiffness: 100, damping: 30 })
+
+  // Parallax effects for the breathing core based on scroll
+  const coreScrollY = useTransform(scrollY, [0, 500], [0, 150])
+  const textY = useTransform(scrollY, [0, 500], [0, 50])
 
   useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const { clientX, clientY } = e
+      const x = (clientX - window.innerWidth / 2) / 30
+      const y = (clientY - window.innerHeight / 2) / 30
+      mouseX.set(x)
+      mouseY.set(y)
+    }
+    window.addEventListener("mousemove", handleMouseMove)
+
+    // Generate motes on the client side only to avoid hydration errors
+    const newMotes = [...Array(10)].map((_, i) => ({
+      id: i,
+      size: Math.random() * 3 + 2,
+      left: Math.random() * 100 + "%",
+      top: Math.random() * 100 + "%",
+      duration: Math.random() * 10 + 10,
+      delay: Math.random() * 5
+    }))
+    setMotes(newMotes)
+
     const interval = setInterval(() => {
       setCurrentWord((prev) => (prev + 1) % words.length)
-    }, 3000)
-    return () => clearInterval(interval)
-  }, [])
+    }, 4000)
+    return () => {
+      clearInterval(interval)
+      window.removeEventListener("mousemove", handleMouseMove)
+    }
+  }, [mouseX, mouseY])
+
+  // Combined transforms for mouse + scroll
+  const coreX = springX
+  const coreTranslateY = useTransform(coreScrollY, (v) => v + (mouseY.get() * 0.5)) // Combine scroll and mouse
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Animated gradient background */}
-      <div className="absolute inset-0 bg-background">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-background to-background" />
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
+      {/* Abstract Background - Zen Motes (Particles) */}
+      <div className="absolute inset-0 pointer-events-none">
+        {motes.map((mote) => (
+          <motion.div
+            key={`mote-${mote.id}`}
+            className="absolute rounded-full bg-primary/10"
+            style={{
+              width: mote.size + "px",
+              height: mote.size + "px",
+              left: mote.left,
+              top: mote.top,
+              willChange: "transform, opacity"
+            }}
+            animate={{
+              y: [0, -100 - (mote.size * 20)],
+              opacity: [0, 0.6, 0],
+            }}
+            transition={{
+              duration: mote.duration,
+              repeat: Infinity,
+              ease: "linear",
+              delay: mote.delay
+            }}
+          />
+        ))}
+      </div>
+
+      {/* The Breathing Core - Center Visual Enhancement */}
+      <motion.div 
+        className="absolute inset-0 flex items-center justify-center pointer-events-none"
+        style={{ x: coreX, y: coreTranslateY, willChange: "transform" }}
+      >
+        {/* Outer Aura */}
         <motion.div
-          className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/8 rounded-full blur-[100px]"
+          className="absolute w-[600px] h-[600px] md:w-[800px] md:h-[800px] rounded-full bg-primary/5 blur-[80px]"
           animate={{
-            x: [0, 40, 0],
-            y: [0, 20, 0],
             scale: [1, 1.05, 1],
+            opacity: [0.2, 0.4, 0.2],
           }}
           transition={{
-            duration: 30,
+            duration: 12,
             repeat: Infinity,
             ease: "easeInOut",
           }}
+          style={{ willChange: "transform, opacity" }}
         />
+        {/* Middle Resonance layer */}
         <motion.div
-          className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-accent/8 rounded-full blur-[100px]"
-          animate={{
-            x: [0, -30, 0],
-            y: [0, -25, 0],
-            scale: [1, 1.08, 1],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-        <motion.div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-secondary/50 rounded-full blur-[80px]"
+          className="absolute w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full bg-secondary/20 blur-[60px]"
           animate={{
             scale: [1, 1.1, 1],
             opacity: [0.3, 0.5, 0.3],
           }}
           transition={{
-            duration: 20,
+            duration: 18,
             repeat: Infinity,
             ease: "easeInOut",
           }}
+          style={{ willChange: "transform, opacity" }}
         />
-      </div>
+        {/* Inner Core */}
+        <motion.div
+          className="absolute w-[200px] h-[200px] md:w-[350px] md:h-[350px] rounded-full bg-accent/10 blur-[40px]"
+          animate={{
+            scale: [1, 1.02, 1],
+            opacity: [0.4, 0.6, 0.4],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1,
+          }}
+          style={{ willChange: "transform, opacity" }}
+        />
+      </motion.div>
 
-      {/* Subtle organic pattern */}
-      <div className="absolute inset-0 opacity-[0.015]">
+      {/* Subtle organic pattern overlay */}
+      <div className="absolute inset-0 opacity-[0.015] pointer-events-none">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="zen-pattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
@@ -74,56 +147,69 @@ export function Hero() {
         </svg>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 w-full flex items-center justify-between">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 w-full flex flex-col items-center justify-center pointer-events-none">
         
-        {/* Main Content - Left Aligned */}
-        <div className="max-w-3xl text-left">
+        {/* Main Content - Centered */}
+        <motion.div 
+          className="max-w-4xl text-center flex flex-col items-center pointer-events-auto"
+          style={{ y: textY }}
+        >
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-background/40 backdrop-blur-md border border-primary/20 mb-10 shadow-[0_0_30px_-5px_rgba(var(--primary),0.2)]"
           >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/50 border border-border mb-8"
-            >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-              </span>
-              <span className="text-sm text-muted-foreground">Available for opportunities</span>
-            </motion.div>
+             <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+            </span>
+            <span className="text-sm font-medium tracking-wide text-foreground/90 uppercase">Available for opportunities</span>
           </motion.div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-5xl md:text-7xl lg:text-8xl font-medium tracking-tight mb-6 leading-tight"
-          >
-            <span className="text-foreground">I Build</span>
-            <br />
-            <span className="relative inline-block min-w-[300px] md:min-w-[500px]">
-              <motion.span
-                key={currentWord}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.5 }}
-                className="text-primary pr-4"
-              >
-                {words[currentWord]}
-              </motion.span>
-            </span>
-          </motion.h1>
+          <div className="overflow-hidden mb-4">
+            <motion.h1
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }} // smooth, powerful ease out
+              className="text-6xl sm:text-7xl md:text-8xl lg:text-[7rem] font-bold tracking-tighter leading-[1.1] text-foreground"
+            >
+              I Build
+            </motion.h1>
+          </div>
+          
+          <div className="overflow-hidden mb-12 h-[80px] sm:h-[100px] md:h-[120px] lg:h-[150px] flex items-center justify-center">
+            <motion.div
+               initial={{ opacity: 0 }}
+               animate={{ opacity: 1 }}
+               transition={{ duration: 1, delay: 0.5 }}
+               className="relative w-full h-full flex justify-center"
+            >
+              <div className="relative w-full h-full flex items-center justify-center">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentWord}
+                    initial={{ y: 60, opacity: 0, filter: "blur(10px)" }}
+                    animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+                    exit={{ y: -60, opacity: 0, filter: "blur(10px)" }}
+                    transition={{ 
+                      duration: 0.8, 
+                      ease: [0.22, 1, 0.36, 1] 
+                    }}
+                    className="absolute text-5xl sm:text-6xl md:text-7xl lg:text-[6rem] font-bold text-primary tracking-tight whitespace-nowrap"
+                  >
+                    {words[currentWord]}
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </motion.div>
+          </div>
 
           <motion.p
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-xl md:text-2xl text-muted-foreground max-w-2xl mb-12 leading-relaxed"
+            transition={{ duration: 1.2, delay: 0.6, ease: "easeOut" }}
+            className="text-lg md:text-xl lg:text-2xl text-muted-foreground/90 max-w-2xl mx-auto mb-14 leading-relaxed font-medium"
           >
             Full Stack Software Engineer passionate about AI and creating
             intelligent applications that push the boundaries of what&apos;s possible.
@@ -132,15 +218,15 @@ export function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-16"
+            transition={{ duration: 1, delay: 0.8, ease: "easeOut" }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-16"
           >
             <MagneticButton>
               <motion.a
                 href="#projects"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-primary text-primary-foreground font-medium rounded-full hover:bg-primary/90 transition-colors block"
+                className="px-10 py-5 bg-primary text-primary-foreground font-medium rounded-full hover:bg-primary/90 transition-all block shadow-[0_0_40px_-10px_rgba(var(--primary),0.5)] hover:shadow-[0_0_60px_-15px_rgba(var(--primary),0.6)]"
               >
                 View My Work
               </motion.a>
@@ -150,7 +236,7 @@ export function Hero() {
                 href="#contact"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 border border-border text-foreground font-medium rounded-full hover:bg-secondary/50 transition-colors block"
+                className="px-10 py-5 bg-secondary/50 backdrop-blur-sm border border-border text-foreground font-medium rounded-full hover:bg-secondary/80 transition-all block"
               >
                 Get in Touch
               </motion.a>
@@ -160,80 +246,53 @@ export function Hero() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="flex items-center gap-6"
+            transition={{ duration: 1.5, delay: 1 }}
+            className="flex items-center justify-center gap-8"
           >
             {[
               { icon: Github, href: "#", label: "GitHub" },
               { icon: Linkedin, href: "#", label: "LinkedIn" },
               { icon: Twitter, href: "#", label: "Twitter" },
-            ].map(({ icon: Icon, href, label }) => (
+            ].map(({ icon: Icon, href, label }, i) => (
               <motion.a
                 key={label}
                 href={href}
-                whileHover={{ scale: 1.1, y: -2 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 1 + i * 0.1 }}
+                whileHover={{ scale: 1.1, y: -4, color: "var(--primary)" }}
                 whileTap={{ scale: 0.95 }}
-                className="p-3 rounded-full bg-secondary/50 border border-border text-muted-foreground hover:text-primary hover:border-primary/50 transition-colors"
+                className="p-4 rounded-full bg-secondary/30 backdrop-blur-sm border border-border/50 text-muted-foreground transition-all duration-300 hover:border-primary/50 hover:bg-secondary/60"
                 aria-label={label}
               >
                 <Icon className="w-5 h-5" />
               </motion.a>
             ))}
           </motion.div>
-        </div>
-
-        <div className="hidden lg:flex items-center justify-end gap-16 pr-8">
-          <motion.div 
-            className="relative w-[300px] h-[300px] flex items-center justify-center"
-          >
-            {/* Soft breathing orb */}
-            <motion.div 
-              className="absolute w-64 h-64 bg-primary/20 rounded-full blur-[80px]"
-              animate={{ 
-                scale: [1, 1.1, 1],
-                opacity: [0.3, 0.5, 0.3]
-              }}
-              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            />
-            {/* Inner accent orb */}
-            <motion.div 
-              className="absolute w-32 h-32 bg-accent/10 rounded-full blur-[60px]"
-              animate={{ 
-                scale: [1, 1.3, 1],
-                opacity: [0.4, 0.7, 0.4]
-              }}
-              transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            />
-          </motion.div>
-
-          {/* Vertical Text Element */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 1, duration: 1 }}
-            className="text-muted-foreground font-mono text-xs tracking-[0.4em] uppercase opacity-50"
-            style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
-          >
-            Software • Architecture • AI
-          </motion.div>
-        </div>
+        </motion.div>
       </div>
 
       {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        transition={{ delay: 1.8, duration: 2 }}
+         className="absolute bottom-8 left-1/2 -translate-x-1/2 pointer-events-auto"
       >
-        <motion.div
+        <motion.a
+          href="#about"
           animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="flex flex-col items-center gap-2 text-muted-foreground"
+          transition={{ 
+            duration: 2.5, 
+            repeat: Infinity, 
+            ease: "easeInOut",
+          }}
+          style={{ willChange: "transform" }}
+          className="flex flex-col items-center gap-3 text-muted-foreground hover:text-primary transition-colors cursor-pointer"
         >
-          <span className="text-xs uppercase tracking-widest">Scroll</span>
+          <span className="text-[10px] uppercase tracking-[0.3em] font-medium">Scroll to explore</span>
           <ArrowDown className="w-4 h-4" />
-        </motion.div>
+        </motion.a>
       </motion.div>
     </section>
   )

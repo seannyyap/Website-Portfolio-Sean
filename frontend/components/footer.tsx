@@ -35,11 +35,6 @@ export function Footer() {
               </motion.a>
             ))}
           </div>
-
-          {/* Copyright */}
-          <p className="text-sm text-muted-foreground flex items-center gap-1">
-            Built with <Heart className="w-4 h-4 text-primary" /> using Next.js & AI
-          </p>
         </div>
       </div>
     </footer>
