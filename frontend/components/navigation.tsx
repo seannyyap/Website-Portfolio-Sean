@@ -4,6 +4,8 @@ import { motion, useScroll, useMotionValueEvent } from "framer-motion"
 import { useState } from "react"
 import { Menu, X } from "lucide-react"
 
+import { MagneticButton } from "./ui/magnetic-button"
+
 const navItems = [
   { name: "About", href: "#about" },
   { name: "Projects", href: "#projects" },
@@ -34,7 +36,7 @@ export function Navigation() {
         transition={{ duration: 0.3 }}
         className="fixed top-0 left-0 right-0 z-50 px-6 py-4"
       >
-        <nav className="max-w-6xl mx-auto flex items-center justify-between px-6 py-3 rounded-full bg-card/80 backdrop-blur-lg border border-border">
+        <nav className="max-w-6xl mx-auto flex items-center justify-between px-6 py-3 rounded-full bg-card/40 backdrop-blur-lg border border-border/40 transition-all duration-500">
           <motion.a
             href="#"
             whileHover={{ scale: 1.02 }}
@@ -59,14 +61,16 @@ export function Navigation() {
             ))}
           </ul>
 
-          <motion.a
-            href="#contact"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="hidden md:block px-5 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-full hover:bg-primary/90 transition-colors"
-          >
-            Say Hello
-          </motion.a>
+          <MagneticButton className="hidden md:block">
+            <motion.a
+              href="#contact"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-5 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-full hover:bg-primary/90 transition-colors block"
+            >
+              Say Hello
+            </motion.a>
+          </MagneticButton>
 
           {/* Mobile Menu Button */}
           <button

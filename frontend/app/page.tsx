@@ -7,8 +7,17 @@ import { Experience } from "@/components/experience"
 import { Contact } from "@/components/contact"
 import { Footer } from "@/components/footer"
 import { SmoothScroll } from "@/components/smooth-scroll"
+import { client } from "@/sanity/lib/client"
+import { PROJECTS_QUERY, EXPERIENCE_QUERY } from "@/sanity/lib/queries"
 
-export default function Home() {
+export default async function Home() {
+  const [projects, experience] = client 
+    ? await Promise.all([
+        client.fetch(PROJECTS_QUERY).catch(() => []),
+        client.fetch(EXPERIENCE_QUERY).catch(() => []),
+      ])
+    : [[], []]
+
   return (
     <>
       <SmoothScroll />
@@ -17,9 +26,8 @@ export default function Home() {
         <Hero />
         <About />
         <TechStack />
-        <Projects />
-        <Experience />
-        <Contact />
+        <Projects projects={projects} />
+        <Experience milestones={experience} />
       </main>
       <Footer />
     </>

@@ -3,54 +3,61 @@
 import { motion, useInView } from "framer-motion"
 import { useRef, useState } from "react"
 import { ArrowUpRight, Github, ExternalLink, Bot, Sparkles, Database, Globe } from "lucide-react"
+import Image from "next/image"
+import { urlForImage } from "@/sanity/lib/image"
 
-const projects = [
-  {
-    title: "AI Chat Platform",
-    description: "A sophisticated conversational AI platform with multi-model support, real-time streaming, and context-aware responses. Built with RAG architecture for enhanced knowledge retrieval.",
-    tags: ["Next.js", "OpenAI", "LangChain", "Vector DB"],
-    icon: Bot,
-    color: "from-primary/10 to-accent/10",
-    github: "#",
-    live: "#",
-    featured: true,
-  },
-  {
-    title: "Neural Code Assistant",
-    description: "An intelligent code completion and review tool that understands context, suggests improvements, and explains complex code patterns using fine-tuned models.",
-    tags: ["Python", "Transformers", "FastAPI", "React"],
-    icon: Sparkles,
-    color: "from-accent/10 to-primary/10",
-    github: "#",
-    live: "#",
-    featured: true,
-  },
-  {
-    title: "Data Intelligence Hub",
-    description: "A comprehensive analytics platform that transforms raw data into actionable insights using AI-powered visualization and natural language queries.",
-    tags: ["TypeScript", "PostgreSQL", "AI SDK", "D3.js"],
-    icon: Database,
-    color: "from-primary/15 to-secondary/30",
-    github: "#",
-    live: "#",
-    featured: true,
-  },
-  {
-    title: "Smart Content Generator",
-    description: "Multi-modal content generation platform supporting text, images, and structured data with brand voice adaptation and SEO optimization.",
-    tags: ["Next.js", "Stable Diffusion", "GPT-4", "AWS"],
-    icon: Globe,
-    color: "from-accent/15 to-secondary/30",
-    github: "#",
-    live: "#",
-    featured: false,
-  },
-]
+interface Project {
+  _id: string
+  title: string
+  description: string
+  tags: string[]
+  githubUrl?: string
+  liveUrl?: string
+  featured: boolean
+  image?: any
+}
 
-export function Projects() {
+interface ProjectsProps {
+  projects: Project[]
+}
+
+const ICON_MAP: Record<string, any> = {
+  "Bot": Bot,
+  "Sparkles": Sparkles,
+  "Database": Database,
+  "Globe": Globe,
+}
+
+const DEFAULT_COLOR = "from-primary/10 to-accent/10"
+
+export function Projects({ projects = [] }: ProjectsProps) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+
+  // Fallback to mock data if Sanity is empty (for dev phase)
+  const displayProjects = projects.length > 0 ? projects : [
+    {
+      _id: "mock-1",
+      title: "AI Chat Platform",
+      description: "A sophisticated conversational AI platform with multi-model support, real-time streaming, and context-aware responses. Built with RAG architecture for enhanced knowledge retrieval.",
+      tags: ["Next.js", "OpenAI", "LangChain", "Vector DB"],
+      githubUrl: "#",
+      liveUrl: "#",
+      featured: true,
+      iconName: "Bot"
+    },
+    {
+      _id: "mock-2",
+      title: "Neural Code Assistant",
+      description: "An intelligent code completion and review tool that understands context, suggests improvements, and explains complex code patterns using fine-tuned models.",
+      tags: ["Python", "Transformers", "FastAPI", "React"],
+      githubUrl: "#",
+      liveUrl: "#",
+      featured: true,
+      iconName: "Sparkles"
+    }
+  ]
 
   return (
     <section id="projects" className="py-32 px-6 relative">
@@ -61,115 +68,146 @@ export function Projects() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-24 md:pl-8"
         >
           <span className="text-primary text-sm font-mono uppercase tracking-widest">Projects</span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-4 text-balance">
+          <h2 className="text-3xl md:text-5xl font-medium mt-6 text-balance tracking-tight">
             Building Intelligent Solutions
           </h2>
-          <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
+          <p className="text-muted-foreground mt-6 max-w-2xl text-lg leading-loose">
             A selection of projects that showcase my passion for AI and full-stack development.
           </p>
         </motion.div>
 
         {/* Featured Projects Grid */}
         <div className="grid lg:grid-cols-2 gap-6 mb-6">
-          {projects.filter(p => p.featured).map((project, index) => (
-            <motion.div
-              key={project.title}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-              className="group relative"
-            >
-              <div className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${project.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-              <div className="relative p-8 rounded-3xl bg-card border border-border group-hover:border-primary/30 transition-all duration-300 h-full">
-                {/* Icon */}
-                <motion.div
-                  animate={hoveredIndex === index ? { rotate: 360 } : {}}
-                  transition={{ duration: 0.5 }}
-                  className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6"
-                >
-                  <project.icon className="w-7 h-7 text-primary" />
-                </motion.div>
+          {displayProjects.filter(p => p.featured).map((project: any, index) => {
+            const Icon = ICON_MAP[project.iconName] || Bot
+            const imageUrl = project.image ? urlForImage(project.image).width(800).url() : null
 
-                {/* Content */}
-                <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
-                  {project.title}
-                </h3>
-                <p className="text-muted-foreground leading-relaxed mb-6">
-                  {project.description}
-                </p>
+            return (
+              <motion.div
+                key={project._id}
+                initial={{ opacity: 0, y: 30 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 1.2, delay: 0.2 + index * 0.15, ease: [0.16, 1, 0.3, 1] }}
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                className="group relative"
+              >
+                <div className={`absolute inset-0 rounded-[2.5rem] bg-gradient-to-br ${DEFAULT_COLOR} opacity-0 group-hover:opacity-60 transition-opacity duration-1000`} />
+                <div className="relative p-10 rounded-[2.5rem] bg-card/40 border border-border/40 group-hover:border-primary/20 backdrop-blur-md transition-all duration-700 h-full flex flex-col">
+                  
+                  {/* Image Preview if available */}
+                  {imageUrl && (
+                    <div className="relative w-full h-56 mb-8 rounded-2xl overflow-hidden border border-border/30">
+                      <Image 
+                        src={imageUrl} 
+                        alt={project.title} 
+                        fill 
+                        className="object-cover group-hover:scale-[1.03] transition-transform duration-1000 ease-[0.16,1,0.3,1]"
+                      />
+                    </div>
+                  )}
 
-                {/* Tags */}
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-3 py-1 text-xs font-mono bg-secondary/50 text-muted-foreground rounded-full"
+                  <div className="flex items-center gap-5 mb-6">
+                    <motion.div
+                      animate={hoveredIndex === index ? { y: -4, scale: 1.05 } : { y: 0, scale: 1 }}
+                      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                      className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center"
                     >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+                      <Icon className="w-6 h-6 text-primary" />
+                    </motion.div>
+                    <h3 className="text-2xl font-medium text-foreground group-hover:text-primary transition-colors duration-500">
+                      {project.title}
+                    </h3>
+                  </div>
 
-                {/* Links */}
-                <div className="flex items-center gap-4">
-                  <motion.a
-                    href={project.github}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    <Github className="w-4 h-4" />
-                    Code
-                  </motion.a>
-                  <motion.a
-                    href={project.live}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                    Live Demo
-                    <ArrowUpRight className="w-3 h-3" />
-                  </motion.a>
+                  <p className="text-lg text-muted-foreground leading-loose mb-8">
+                    {project.description}
+                  </p>
+
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-2 mb-6 mt-auto">
+                    {project.tags?.map((tag: string) => (
+                      <span
+                        key={tag}
+                        className="px-3 py-1 text-xs font-mono bg-secondary/50 text-muted-foreground rounded-full"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Links */}
+                  <div className="flex items-center gap-4">
+                    {project.githubUrl && (
+                      <motion.a
+                        href={project.githubUrl}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        <Github className="w-4 h-4" />
+                        Code
+                      </motion.a>
+                    )}
+                    {project.liveUrl && (
+                      <motion.a
+                        href={project.liveUrl}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                        Live Demo
+                        <ArrowUpRight className="w-3 h-3" />
+                      </motion.a>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            )
+          })}
         </div>
 
         {/* Other Projects */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {projects.filter(p => !p.featured).map((project, index) => (
-            <motion.div
-              key={project.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
-              className="group p-6 rounded-2xl bg-card/50 border border-border hover:border-primary/30 transition-all duration-300"
-            >
-              <project.icon className="w-6 h-6 text-primary mb-4" />
-              <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
-                {project.title}
-              </h3>
-              <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-                {project.description}
-              </p>
-              <div className="flex items-center gap-3">
-                <a href={project.github} className="text-muted-foreground hover:text-foreground transition-colors">
-                  <Github className="w-4 h-4" />
-                </a>
-                <a href={project.live} className="text-primary hover:text-primary/80 transition-colors">
-                  <ExternalLink className="w-4 h-4" />
-                </a>
-              </div>
-            </motion.div>
-          ))}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 pt-12">
+          {displayProjects.filter(p => !p.featured).map((project: any, index) => {
+             const Icon = ICON_MAP[project.iconName] || Bot
+             return (
+              <motion.div
+                key={project._id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 1.0, delay: 0.5 + index * 0.15, ease: [0.16, 1, 0.3, 1] }}
+                className="group p-8 rounded-3xl bg-card/20 border border-border/40 hover:border-primary/20 backdrop-blur-md transition-all duration-700"
+              >
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mb-6">
+                  <Icon className="w-5 h-5 text-primary opacity-80" />
+                </div>
+                <h3 className="text-lg font-medium mb-3 text-foreground group-hover:text-primary transition-colors duration-500">
+                  {project.title}
+                </h3>
+                <p className="text-sm text-muted-foreground mb-6 leading-loose line-clamp-3">
+                  {project.description}
+                </p>
+                <div className="flex items-center gap-4">
+                  {project.githubUrl && (
+                    <a href={project.githubUrl} className="text-muted-foreground hover:text-foreground transition-colors duration-300">
+                      <Github className="w-4 h-4" />
+                    </a>
+                  )}
+                  {project.liveUrl && (
+                    <a href={project.liveUrl} className="text-primary/70 hover:text-primary transition-colors duration-300">
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  )}
+                </div>
+              </motion.div>
+            )
+          })}
         </div>
 
         {/* View All Button */}

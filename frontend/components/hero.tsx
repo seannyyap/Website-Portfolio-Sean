@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import { ArrowDown, Github, Linkedin, Twitter } from "lucide-react"
 import { useEffect, useState } from "react"
+import { MagneticButton } from "./ui/magnetic-button"
 
 const words = ["AI Applications", "Mindful Code", "Digital Harmony", "The Future"]
 
@@ -73,105 +74,149 @@ export function Hero() {
         </svg>
       </div>
 
-      <div className="relative z-10 max-w-6xl mx-auto px-6 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
+      <div className="relative z-10 max-w-7xl mx-auto px-6 w-full flex items-center justify-between">
+        
+        {/* Main Content - Left Aligned */}
+        <div className="max-w-3xl text-left">
           <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/50 border border-border mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
           >
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-            </span>
-            <span className="text-sm text-muted-foreground">Available for opportunities</span>
-          </motion.div>
-        </motion.div>
-
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6"
-        >
-          <span className="text-foreground">I Build</span>
-          <br />
-          <span className="relative inline-block min-w-[300px] md:min-w-[500px]">
-            <motion.span
-              key={currentWord}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.5 }}
-              className="text-primary"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/50 border border-border mb-8"
             >
-              {words[currentWord]}
-            </motion.span>
-          </span>
-        </motion.h1>
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+              </span>
+              <span className="text-sm text-muted-foreground">Available for opportunities</span>
+            </motion.div>
+          </motion.div>
 
-        <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed"
-        >
-          Full Stack Software Engineer passionate about AI and creating
-          intelligent applications that push the boundaries of what&apos;s possible.
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
-        >
-          <motion.a
-            href="#projects"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="px-8 py-4 bg-primary text-primary-foreground font-semibold rounded-full hover:bg-primary/90 transition-colors"
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-5xl md:text-7xl lg:text-8xl font-medium tracking-tight mb-6 leading-tight"
           >
-            View My Work
-          </motion.a>
-          <motion.a
-            href="#contact"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="px-8 py-4 border border-border text-foreground font-semibold rounded-full hover:bg-secondary transition-colors"
-          >
-            Get in Touch
-          </motion.a>
-        </motion.div>
+            <span className="text-foreground">I Build</span>
+            <br />
+            <span className="relative inline-block min-w-[300px] md:min-w-[500px]">
+              <motion.span
+                key={currentWord}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5 }}
+                className="text-primary pr-4"
+              >
+                {words[currentWord]}
+              </motion.span>
+            </span>
+          </motion.h1>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="flex items-center justify-center gap-6"
-        >
-          {[
-            { icon: Github, href: "#", label: "GitHub" },
-            { icon: Linkedin, href: "#", label: "LinkedIn" },
-            { icon: Twitter, href: "#", label: "Twitter" },
-          ].map(({ icon: Icon, href, label }) => (
-            <motion.a
-              key={label}
-              href={href}
-              whileHover={{ scale: 1.1, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              className="p-3 rounded-full bg-secondary/50 border border-border text-muted-foreground hover:text-primary hover:border-primary/50 transition-colors"
-              aria-label={label}
-            >
-              <Icon className="w-5 h-5" />
-            </motion.a>
-          ))}
-        </motion.div>
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-xl md:text-2xl text-muted-foreground max-w-2xl mb-12 leading-relaxed"
+          >
+            Full Stack Software Engineer passionate about AI and creating
+            intelligent applications that push the boundaries of what&apos;s possible.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-16"
+          >
+            <MagneticButton>
+              <motion.a
+                href="#projects"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-8 py-4 bg-primary text-primary-foreground font-medium rounded-full hover:bg-primary/90 transition-colors block"
+              >
+                View My Work
+              </motion.a>
+            </MagneticButton>
+            <MagneticButton>
+              <motion.a
+                href="#contact"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-8 py-4 border border-border text-foreground font-medium rounded-full hover:bg-secondary/50 transition-colors block"
+              >
+                Get in Touch
+              </motion.a>
+            </MagneticButton>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="flex items-center gap-6"
+          >
+            {[
+              { icon: Github, href: "#", label: "GitHub" },
+              { icon: Linkedin, href: "#", label: "LinkedIn" },
+              { icon: Twitter, href: "#", label: "Twitter" },
+            ].map(({ icon: Icon, href, label }) => (
+              <motion.a
+                key={label}
+                href={href}
+                whileHover={{ scale: 1.1, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-3 rounded-full bg-secondary/50 border border-border text-muted-foreground hover:text-primary hover:border-primary/50 transition-colors"
+                aria-label={label}
+              >
+                <Icon className="w-5 h-5" />
+              </motion.a>
+            ))}
+          </motion.div>
+        </div>
+
+        <div className="hidden lg:flex items-center justify-end gap-16 pr-8">
+          <motion.div 
+            className="relative w-[300px] h-[300px] flex items-center justify-center"
+          >
+            {/* Soft breathing orb */}
+            <motion.div 
+              className="absolute w-64 h-64 bg-primary/20 rounded-full blur-[80px]"
+              animate={{ 
+                scale: [1, 1.1, 1],
+                opacity: [0.3, 0.5, 0.3]
+              }}
+              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            />
+            {/* Inner accent orb */}
+            <motion.div 
+              className="absolute w-32 h-32 bg-accent/10 rounded-full blur-[60px]"
+              animate={{ 
+                scale: [1, 1.3, 1],
+                opacity: [0.4, 0.7, 0.4]
+              }}
+              transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            />
+          </motion.div>
+
+          {/* Vertical Text Element */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 1, duration: 1 }}
+            className="text-muted-foreground font-mono text-xs tracking-[0.4em] uppercase opacity-50"
+            style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
+          >
+            Software • Architecture • AI
+          </motion.div>
+        </div>
       </div>
 
       {/* Scroll indicator */}
