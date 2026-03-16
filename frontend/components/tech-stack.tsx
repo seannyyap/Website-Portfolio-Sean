@@ -49,7 +49,7 @@ export function TechStack() {
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
   return (
-    <section className="py-20 px-6 overflow-hidden">
+    <section className="py-20 px-8 md:px-6 overflow-hidden">
       <div className="max-w-6xl mx-auto" ref={ref}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
