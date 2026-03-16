@@ -22,12 +22,13 @@ export default async function Home() {
     <>
       <SmoothScroll />
       <Navigation />
-      <main>
+      <main id="main-content">
         <Hero />
         <About />
         <TechStack />
         <Projects projects={projects} />
         <Experience milestones={experience} />
+        <Contact />
       </main>
       <Footer />
     </>

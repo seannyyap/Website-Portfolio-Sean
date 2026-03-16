@@ -1,10 +1,11 @@
 "use client"
 
-import { motion, useScroll, useMotionValueEvent } from "framer-motion"
-import { useState } from "react"
+import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-motion"
+import { useState, useEffect } from "react"
 import { Menu, X } from "lucide-react"
 
 import { MagneticButton } from "./ui/magnetic-button"
+import { ThemeToggle } from "./theme-toggle"
 
 const navItems = [
   { name: "About", href: "#about" },
@@ -15,6 +16,7 @@ const navItems = [
 
 export function Navigation() {
   const [hidden, setHidden] = useState(false)
+  const [activeSection, setActiveSection] = useState("")
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { scrollY } = useScroll()
 
@@ -27,6 +29,30 @@ export function Navigation() {
       setHidden(false)
     }
   })
+
+  useEffect(() => {
+    const sections = ["about", "projects", "experience", "contact"]
+    const observerOptions = {
+      root: null,
+      rootMargin: "-20% 0px -70% 0px",
+      threshold: 0,
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id)
+        }
+      })
+    }, observerOptions)
+
+    sections.forEach((id) => {
+      const element = document.getElementById(id)
+      if (element) observer.observe(element)
+    })
+
+    return () => observer.disconnect()
+  }, [])
 
   return (
     <>
@@ -42,35 +68,45 @@ export function Navigation() {
             whileHover={{ scale: 1.02 }}
             className="text-xl font-medium text-foreground tracking-tight"
           >
-            your<span className="text-primary">name</span>
+            sean<span className="text-primary">.dev</span>
           </motion.a>
 
           {/* Desktop Navigation */}
           <ul className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => (
-              <li key={item.name}>
-                <motion.a
-                  href={item.href}
-                  whileHover={{ scale: 1.05 }}
-                  className="relative px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors group"
-                >
-                  {item.name}
-                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-1/2" />
-                </motion.a>
-              </li>
-            ))}
+            {navItems.map((item) => {
+              const isActive = activeSection === item.href.substring(1)
+              return (
+                <li key={item.name}>
+                  <motion.a
+                    href={item.href}
+                    whileHover={{ scale: 1.05 }}
+                    className={`relative px-4 py-2 text-sm transition-colors group ${
+                      isActive ? "text-primary font-bold" : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {item.name}
+                    <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-primary transition-all duration-300 ${
+                      isActive ? "w-1/2" : "w-0 group-hover:w-1/2"
+                    }`} />
+                  </motion.a>
+                </li>
+              )
+            })}
           </ul>
 
-          <MagneticButton className="hidden md:block">
-            <motion.a
-              href="#contact"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-5 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-full hover:bg-primary/90 transition-colors block"
-            >
-              Say Hello
-            </motion.a>
-          </MagneticButton>
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <MagneticButton className="hidden md:block">
+              <motion.a
+                href="#contact"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-5 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-full hover:bg-primary/90 transition-colors block"
+              >
+                Say Hello
+              </motion.a>
+            </MagneticButton>
+          </div>
 
           {/* Mobile Menu Button */}
           <button

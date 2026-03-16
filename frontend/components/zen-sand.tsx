@@ -52,25 +52,22 @@ export function ZenSand() {
       const isDark = document.documentElement.classList.contains('dark') || theme === 'dark'
       const baseColor = isDark ? '255, 255, 255' : '0, 0, 0'
 
-      // Draw active ripples
-      ripples.forEach((ripple, index) => {
+      // Filter out dead ripples instead of splicing in a loop
+      ripples = ripples.filter((ripple) => {
+        // Draw active ripple
         ctx.beginPath()
         ctx.arc(ripple.x, ripple.y, ripple.radius, 0, Math.PI * 2)
         
-        // Easing the opacity: fades out as it expands
         const currentOpacity = ripple.opacity * ripple.life
         ctx.strokeStyle = `rgba(${baseColor}, ${currentOpacity})`
         ctx.lineWidth = 1 + (ripple.radius / ripple.maxRadius) * 2
         ctx.stroke()
 
         // Update state
-        ripple.radius += 0.8 // Slow, deliberate expansion
-        ripple.life -= Math.random() * 0.005 + 0.005 // fade out
+        ripple.radius += 0.8
+        ripple.life -= Math.random() * 0.005 + 0.005
 
-        // Remove dead ripples
-        if (ripple.life <= 0 || ripple.radius >= ripple.maxRadius) {
-          ripples.splice(index, 1)
-        }
+        return ripple.life > 0 && ripple.radius < ripple.maxRadius
       })
 
       animationFrameId = requestAnimationFrame(draw)

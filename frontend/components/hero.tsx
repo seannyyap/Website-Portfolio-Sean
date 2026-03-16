@@ -102,7 +102,7 @@ export function Hero() {
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          style={{ willChange: "transform, opacity" }}
+          style={{ }}
         />
         {/* Middle Resonance layer */}
         <motion.div
@@ -116,7 +116,7 @@ export function Hero() {
             repeat: Infinity,
             ease: "easeInOut",
           }}
-          style={{ willChange: "transform, opacity" }}
+          style={{ }}
         />
         {/* Inner Core */}
         <motion.div
@@ -131,7 +131,7 @@ export function Hero() {
             ease: "easeInOut",
             delay: 1,
           }}
-          style={{ willChange: "transform, opacity" }}
+          style={{ }}
         />
       </motion.div>
 
@@ -250,7 +250,7 @@ export function Hero() {
             className="flex items-center justify-center gap-8"
           >
             {[
-              { icon: Github, href: "#", label: "GitHub" },
+              { icon: Github, href: "https://github.com/seany99", label: "GitHub" },
               { icon: Linkedin, href: "#", label: "LinkedIn" },
               { icon: Twitter, href: "#", label: "Twitter" },
             ].map(({ icon: Icon, href, label }, i) => (

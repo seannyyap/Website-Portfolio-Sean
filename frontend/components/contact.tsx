@@ -13,10 +13,12 @@ export function Contact() {
     message: "",
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle form submission
-    console.log(formState)
+    // Simulate successful submission
+    const toast = (await import("sonner")).toast
+    toast.success("Message sent! I'll get back to you soon.")
+    setFormState({ name: "", email: "", message: "" })
   }
 
   return (
@@ -60,7 +62,7 @@ export function Contact() {
 
             <div className="space-y-4">
               <motion.a
-                href="mailto:hello@yourname.com"
+                href="mailto:hello@sean.dev"
                 whileHover={{ x: 5 }}
                 className="flex items-center gap-4 p-4 rounded-xl bg-card border border-border hover:border-primary/50 transition-colors group"
               >
@@ -69,7 +71,7 @@ export function Contact() {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Email</p>
-                  <p className="font-medium group-hover:text-primary transition-colors">hello@yourname.com</p>
+                  <p className="font-medium group-hover:text-primary transition-colors">hello@sean.dev</p>
                 </div>
                 <ArrowUpRight className="w-4 h-4 text-muted-foreground ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
               </motion.a>
@@ -83,7 +85,7 @@ export function Contact() {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Location</p>
-                  <p className="font-medium">San Francisco, CA</p>
+                  <p className="font-medium">London, UK</p>
                 </div>
               </motion.div>
             </div>

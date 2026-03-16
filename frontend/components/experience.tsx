@@ -86,70 +86,67 @@ export function Experience({ milestones = [] }: ExperienceProps) {
   })
 
   // Desktop Path and Card Mappings - Synchronized for organic growth
-  // Trunk reaches B0 point (~25%) at scroll 0.2
-  // Trunk reaches B1 point (~45%) at scroll 0.35
-  // Trunk reaches B2 point (~85%) at scroll 0.7
-  // Trunk reaches B3/4 point (~100%) at scroll 0.85
-  
+  // Trunk path length is roughly 280 units. Trunk scroll goes [0, 0.85]
   const trunkProgress = useTransform(smoothProgress, [0, 0.85], [0, 1])
   const trunkOpacity = useTransform(smoothProgress, [0, 0.05], [0, 1])
   
-  // Branches only grow once the trunk reaches them
-  const b0Progress = useTransform(smoothProgress, [0.22, 0.35], [0, 1])
-  const b0Opacity = useTransform(smoothProgress, [0.22, 0.23], [0, 1])
+  // M0: Sprouting at ~28% path length -> Trunk reaches here at scroll 0.24
+  const b0Progress = useTransform(smoothProgress, [0.24, 0.32], [0, 1])
+  const b0Opacity = useTransform(smoothProgress, [0.24, 0.25], [0, 1])
+  const card0Opacity = useTransform(smoothProgress, [0.32, 0.38], [0, 1])
+  const card0Scale = useTransform(smoothProgress, [0.32, 0.38], [0.9, 1])
 
-  const b1Progress = useTransform(smoothProgress, [0.38, 0.52], [0, 1])
-  const b1Opacity = useTransform(smoothProgress, [0.38, 0.39], [0, 1])
+  // M1: Sprouting at ~46% path length -> Trunk reaches here at scroll 0.39
+  const b1Progress = useTransform(smoothProgress, [0.39, 0.47], [0, 1])
+  const b1Opacity = useTransform(smoothProgress, [0.39, 0.40], [0, 1])
+  const card1Opacity = useTransform(smoothProgress, [0.47, 0.53], [0, 1])
+  const card1Scale = useTransform(smoothProgress, [0.47, 0.53], [0.9, 1])
 
-  const b2Progress = useTransform(smoothProgress, [0.72, 0.85], [0, 1])
-  const b2Opacity = useTransform(smoothProgress, [0.72, 0.73], [0, 1])
+  // M2: Sprouting at ~89% path length -> Trunk reaches here at scroll 0.75
+  const b2Progress = useTransform(smoothProgress, [0.75, 0.82], [0, 1])
+  const b2Opacity = useTransform(smoothProgress, [0.75, 0.76], [0, 1])
+  const card2Opacity = useTransform(smoothProgress, [0.82, 0.88], [0, 1])
+  const card2Scale = useTransform(smoothProgress, [0.82, 0.88], [0.9, 1])
 
-  const b3Progress = useTransform(smoothProgress, [0.85, 0.95], [0, 1])
+  // M3: Sprouting at 100% path length -> Trunk reaches here at scroll 0.85
+  const b3Progress = useTransform(smoothProgress, [0.85, 0.92], [0, 1])
   const b3Opacity = useTransform(smoothProgress, [0.85, 0.86], [0, 1])
-
-  const b4Progress = useTransform(smoothProgress, [0.88, 1.0], [0, 1])
-  const b4Opacity = useTransform(smoothProgress, [0.88, 0.89], [0, 1])
-
-  // Cards appear once branches are almost fully grown
-  const card0Opacity = useTransform(smoothProgress, [0.3, 0.4], [0, 1])
-  const card1Opacity = useTransform(smoothProgress, [0.48, 0.58], [0, 1])
-  const card2Opacity = useTransform(smoothProgress, [0.8, 0.9], [0, 1])
   const card3Opacity = useTransform(smoothProgress, [0.92, 0.98], [0, 1])
-  const card4Opacity = useTransform(smoothProgress, [0.98, 1.0], [0, 1])
-
-  const card0Scale = useTransform(smoothProgress, [0.3, 0.4], [0.9, 1])
-  const card1Scale = useTransform(smoothProgress, [0.48, 0.58], [0.9, 1])
-  const card2Scale = useTransform(smoothProgress, [0.8, 0.9], [0.9, 1])
   const card3Scale = useTransform(smoothProgress, [0.92, 0.98], [0.9, 1])
-  const card4Scale = useTransform(smoothProgress, [0.98, 1.0], [0.9, 1])
+
+  // M4: Also sprouting at tip -> trunk reaches at 0.85
+  const b4Progress = useTransform(smoothProgress, [0.86, 0.93], [0, 1])
+  const b4Opacity = useTransform(smoothProgress, [0.86, 0.87], [0, 1])
+  const card4Opacity = useTransform(smoothProgress, [0.93, 0.99], [0, 1])
+  const card4Scale = useTransform(smoothProgress, [0.93, 0.99], [0.9, 1])
 
   const MilestoneCard = ({ milestone, index, style, className, side = "left", ...props }: any) => (
     <motion.div 
-       style={style}
-       className={`bg-card/30 backdrop-blur-3xl border-[0.5px] border-border/20 p-6 lg:p-8 rounded-[2.5rem] shadow-2xl hover:border-primary/40 transition-all duration-700 group relative ${className}`}
+       style={{ ...style, originX: side === 'left' ? 1 : 0, originY: 0.5 }}
+       className={`bg-card/30 backdrop-blur-3xl border-[0.5px] border-border/20 p-4 lg:p-5 rounded-[2rem] shadow-2xl hover:border-primary/40 transition-all duration-700 group ${className}`}
        {...props}
     >
-       {/* Connection Node - Targeted precisely at the edge */}
-       <div className={`absolute top-1/2 ${side === 'left' ? '-right-[1.5px]' : '-left-[1.5px]'} -translate-y-1/2 w-6 h-6 rounded-full bg-primary/20 blur-lg group-hover:bg-primary/50 transition-colors pointer-events-none`} />
-       <div className={`absolute top-1/2 ${side === 'left' ? 'right-0 translate-x-1/2' : 'left-0 -translate-x-1/2'} -translate-y-1/2 w-3 h-3 rounded-full bg-primary ring-4 ring-primary/30 group-hover:scale-150 transition-all pointer-events-none shadow-[0_0_15px_rgba(var(--primary),0.5)]`} />
+       {/* Connection Node */}
+       <div className={`hidden lg:block absolute top-1/2 ${side === 'left' ? '-right-[1.5px]' : '-left-[1.5px]'} -translate-y-1/2 w-6 h-6 rounded-full bg-primary/20 blur-lg group-hover:bg-primary/50 transition-colors pointer-events-none`} />
+       <div className={`hidden lg:block absolute top-1/2 ${side === 'left' ? 'right-0 translate-x-1/2' : 'left-0 -translate-x-1/2'} -translate-y-1/2 w-3 h-3 rounded-full bg-primary ring-4 ring-primary/30 group-hover:scale-150 transition-all pointer-events-none shadow-[0_0_15px_rgba(var(--primary),0.5)]`} />
 
-       <div className="flex items-center gap-4 mb-5">
-          <div className="w-10 h-10 rounded-2xl bg-primary/5 border border-primary/10 flex items-center justify-center text-primary font-bold text-sm shadow-inner group-hover:border-primary/30 transition-colors">
+       <div className="flex items-center gap-3 mb-3">
+          <div className="w-8 h-8 rounded-xl bg-primary/5 border border-primary/10 flex items-center justify-center text-primary font-bold text-xs shadow-inner group-hover:border-primary/30 transition-colors">
             {index + 1}
           </div>
-          <span className="text-xs font-mono text-primary/70 tracking-[0.2em] uppercase font-semibold">
+          <span className="text-[10px] font-mono text-primary/70 tracking-[0.2em] uppercase font-semibold">
             {milestone.year || milestone.period}
           </span>
        </div>
-       <h3 className="text-2xl font-bold text-foreground mb-4 leading-tight tracking-tight group-hover:text-primary transition-colors duration-500">
+       <h3 className="text-lg font-bold text-foreground mb-2 leading-tight tracking-tight group-hover:text-primary transition-colors duration-500">
          {milestone.title}
        </h3>
-       <p className="text-muted-foreground/90 leading-relaxed text-sm lg:text-base mb-8 font-medium">
+       <p className="text-muted-foreground/90 leading-relaxed text-xs lg:text-sm mb-4 font-medium">
          {milestone.description}
        </p>
-       <div className="flex flex-wrap gap-2.5 mt-auto">
+       <div className="flex flex-wrap gap-2 mt-auto">
           {(milestone.tags || milestone.technologies)?.map((tag: string) => (
-            <span key={tag} className="px-4 py-1.5 text-[10px] font-bold font-mono bg-primary/5 text-primary/80 rounded-full border border-primary/10 tracking-widest uppercase transition-all hover:bg-primary/20 hover:text-primary hover:scale-105">
+            <span key={tag} className="px-3 py-1 text-[9px] font-bold font-mono bg-primary/5 text-primary/80 rounded-full border border-primary/10 tracking-widest uppercase transition-all hover:bg-primary/20 hover:text-primary hover:scale-105">
               {tag}
             </span>
           ))}
@@ -161,7 +158,7 @@ export function Experience({ milestones = [] }: ExperienceProps) {
     <section 
       ref={containerRef} 
       id="experience" 
-      className="relative bg-background h-[450vh] lg:h-[600vh]"
+      className="relative bg-background h-[600vh] lg:h-[1000vh]"
     >
       <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden">
         
@@ -240,7 +237,7 @@ export function Experience({ milestones = [] }: ExperienceProps) {
             ========================================= */}
         <div className="hidden lg:block absolute inset-0 w-full h-full max-w-[1200px] mx-auto pointer-events-none">
            {/* The SVG Tree in the center */}
-           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[750px]">
+           <div className="absolute top-[68%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[750px]">
               <div className="absolute inset-0 bg-primary/5 blur-[100px] rounded-full scale-150 animate-pulse" />
               <svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full overflow-visible">
                  <g className="text-primary" style={{ willChange: "transform" }}>
@@ -290,7 +287,7 @@ export function Experience({ milestones = [] }: ExperienceProps) {
            </div>
 
            {/* The Container for Absolute Cards - Sync with SVG box for perfect alignment */}
-           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[750px] pointer-events-none">
+           <div className="absolute top-[68%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[750px] pointer-events-none">
               {/* M0: Year 1 (Left) - (60, 420) -> 15% left, 84% top */}
               {displayMilestones[0] && (
                 <MilestoneCard 

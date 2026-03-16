@@ -2,44 +2,56 @@
 
 import { motion, useInView } from "framer-motion"
 import { useRef } from "react"
-import { Brain, Code2, Cpu, Sparkles } from "lucide-react"
+import { Brain, Code2, Cpu, Sparkles, Layout, FileCode, Terminal, Layers, Database } from "lucide-react"
 
 const skills = [
   { 
     name: "React / Next.js", 
     tag: "Core Expert", 
     description: "Architecting high-performance web apps with App Router & Server Components.",
-    color: "bg-primary/10"
+    color: "bg-primary/5",
+    borderColor: "border-primary/20",
+    icon: Layout
   },
   { 
     name: "TypeScript", 
     tag: "Daily Practice", 
     description: "Writing type-safe, maintainable codebases that scale with complex requirements.",
-    color: "bg-accent/10"
+    color: "bg-accent/5",
+    borderColor: "border-accent/20",
+    icon: FileCode
   },
   { 
     name: "AI / Python", 
     tag: "Active Focus", 
     description: "Integrating LLMs, LangChain, and FastAPI for intelligent system logic.",
-    color: "bg-secondary/20"
+    color: "bg-secondary/10",
+    borderColor: "border-secondary/30",
+    icon: Cpu
   },
   { 
     name: "Node.js", 
     tag: "Reliable Flows", 
     description: "Building efficient, scalable backend architectures and real-time APIs.",
-    color: "bg-primary/5"
+    color: "bg-primary/5",
+    borderColor: "border-primary/10",
+    icon: Terminal
   },
   { 
     name: "Architecture", 
     tag: "Mindful Design", 
     description: "Designing modular, clean systems following SOLID and Clean Architecture.",
-    color: "bg-accent/5"
+    color: "bg-accent/5",
+    borderColor: "border-accent/10",
+    icon: Layers
   },
   { 
     name: "Databases", 
     tag: "Data Harmony", 
     description: "Optimizing PostgreSQL and MongoDB for speed, reliability, and scale.",
-    color: "bg-secondary/10"
+    color: "bg-secondary/10",
+    borderColor: "border-secondary/20",
+    icon: Database
   },
 ]
 
@@ -126,23 +138,26 @@ export function About() {
                 {skills.map((skill, index) => (
                   <SpotlightCard
                     key={skill.name}
-                    className={`p-8 ${skill.color}`}
+                    className={`p-8 ${skill.color} border ${skill.borderColor}`}
                   >
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={isInView ? { opacity: 1, y: 0 } : {}}
                       transition={{ duration: 1.0, delay: 0.3 + index * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                      className="h-full w-full"
+                      className="h-full w-full relative z-10"
                     >
-                      <div className="flex justify-between items-start mb-4">
-                        <h4 className="font-medium text-foreground transition-colors relative z-10">
-                          {skill.name}
-                        </h4>
-                        <span className="text-[10px] font-mono uppercase tracking-widest text-primary relative z-10">
+                      <div className="flex justify-between items-start mb-6">
+                        <div className="w-10 h-10 rounded-xl bg-background/50 flex items-center justify-center text-primary shadow-sm border border-border/20">
+                           <skill.icon className="w-5 h-5" />
+                        </div>
+                        <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-primary/70 font-bold">
                           {skill.tag}
                         </span>
                       </div>
-                      <p className="text-sm text-muted-foreground leading-loose relative z-10">
+                      <h4 className="font-bold text-foreground mb-3 text-lg tracking-tight">
+                        {skill.name}
+                      </h4>
+                      <p className="text-sm text-muted-foreground leading-loose font-medium opacity-80">
                         {skill.description}
                       </p>
                     </motion.div>
