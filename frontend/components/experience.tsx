@@ -20,38 +20,38 @@ interface ExperienceProps {
 const defaultMilestones = [
   {
     _id: "default-1",
-    year: "Year 1",
-    title: "The 'Hello World' Epoch",
-    description: "Wrote my first line of code. Felt like a wizard. Promptly spent 4 hours trying to center a div.",
-    tags: ["HTML/CSS", "Humility", "StackOverflow"],
+    year: "2021",
+    title: "Engineering at Monash",
+    description: "Began my Hons in Software Engineering. Discovered a passion for how complex systems piece together.",
+    tags: ["Monash University", "Foundations", "C/Python"],
   },
   {
     _id: "default-2",
-    year: "Year 2",
-    title: "The Framework Awakening",
-    description: "Discovered React. Realized I didn't have to manipulate the DOM manually anymore. Wept tears of joy.",
-    tags: ["React", "State Management", "Epiphanies"],
+    year: "2023",
+    title: "Research & Localization",
+    description: "Developed a BLE tracking system for my final year project. Contributed to a project accepted by Springer publications.",
+    tags: ["Embedded Systems", "MQTT", "Research"],
   },
   {
     _id: "default-3",
-    year: "Year 3",
-    title: "The Setup Tragedy",
-    description: "Deleted a development database. Learned the difference between `DELETE FROM users` and `DELETE FROM users WHERE id = 1` the hard way.",
-    tags: ["SQL", "Panic", "Valuable Lessons"],
+    year: "2024",
+    title: "The AI Expansion",
+    description: "Built the AI Interview Room, experimenting with Whisper STT, Llama 3, and WebSockets for real-time interaction.",
+    tags: ["FastAPI", "AI/ML", "Real-Time"],
   },
   {
     _id: "default-4",
-    year: "Year 4",
-    title: "The Docker Enlightenment",
-    description: "Finally understood containerization. 'It works on my machine' ceased to be an excuse. Started deploying real apps.",
-    tags: ["Docker", "DevOps", "CI/CD"],
+    year: "Dec 2025",
+    title: "Web Plus Internship",
+    description: "Secured a role at Web Plus. Implemented RBAC security and automated alert workflows using Node.js and MongoDB.",
+    tags: ["Enterprise", "Security", "Backend"],
   },
   {
     _id: "default-5",
-    year: "Present",
-    title: "The Builder's Zenith",
-    description: "Building resilient, AI-driven architectures. Still Googling how to exit Vim, but now I do it in the cloud.",
-    tags: ["Next.js Router", "AI Systems", "Perspective"],
+    year: "Mar 2026",
+    title: "Full Stack Engineer",
+    description: "Transitioned to a full-time role at Web Plus. Optimizing enterprise domain management and high-performance backend pipelines.",
+    tags: ["Spring Boot", "Oracle", "Present"],
   },
 ]
 
@@ -200,7 +200,7 @@ export function Experience({ milestones = [] }: ExperienceProps) {
           <span className="text-primary text-sm font-mono uppercase tracking-widest opacity-80 mb-4 block">
             The Journey
           </span>
-          <h2 className="text-3xl md:text-5xl font-medium text-balance tracking-tight">
+          <h2 className="fluid-heading font-medium text-balance tracking-tight">
             Growing the Tree
           </h2>
         </div>

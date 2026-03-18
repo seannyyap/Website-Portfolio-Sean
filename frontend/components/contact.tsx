@@ -22,11 +22,11 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="py-32 px-6 relative overflow-hidden">
+    <section id="contact" className="py-28 md:py-36 relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent" />
       
-      <div className="max-w-6xl mx-auto relative z-10" ref={ref}>
+      <div className="section-container relative z-10" ref={ref}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -34,7 +34,7 @@ export function Contact() {
           className="text-center mb-16"
         >
           <span className="text-primary text-sm font-mono uppercase tracking-widest">Say Hello</span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-4 text-balance">
+          <h2 className="fluid-heading font-bold mt-4 text-balance">
             Let&apos;s Connect
           </h2>
           <p className="text-muted-foreground mt-4 max-w-xl mx-auto">
@@ -62,7 +62,7 @@ export function Contact() {
 
             <div className="space-y-4">
               <motion.a
-                href="mailto:hello@sean.dev"
+                href="mailto:seanyap26899@gmail.com"
                 whileHover={{ x: 5 }}
                 className="flex items-center gap-4 p-4 rounded-xl bg-card border border-border hover:border-primary/50 transition-colors group"
               >
@@ -71,7 +71,7 @@ export function Contact() {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Email</p>
-                  <p className="font-medium group-hover:text-primary transition-colors">hello@sean.dev</p>
+                  <p className="font-medium group-hover:text-primary transition-colors">seanyap26899@gmail.com</p>
                 </div>
                 <ArrowUpRight className="w-4 h-4 text-muted-foreground ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
               </motion.a>
@@ -85,7 +85,7 @@ export function Contact() {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Location</p>
-                  <p className="font-medium">London, UK</p>
+                  <p className="font-medium">Petaling Jaya, Malaysia</p>
                 </div>
               </motion.div>
             </div>
@@ -97,7 +97,10 @@ export function Contact() {
                 {["GitHub", "LinkedIn", "Twitter"].map((platform) => (
                   <motion.a
                     key={platform}
-                    href="#"
+                    href={
+                      platform === "GitHub" ? "https://github.com/seannyyap" :
+                      platform === "LinkedIn" ? "https://www.linkedin.com/in/yap-de-sheng-b6043824b/" : "#"
+                    }
                     whileHover={{ y: -3 }}
                     className="px-4 py-2 rounded-full bg-secondary/50 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
                   >

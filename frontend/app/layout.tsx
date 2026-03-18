@@ -13,23 +13,23 @@ const fontMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Sean | Full Stack AI Engineer',
-  description: 'Full Stack Software Engineer specializing in AI and building intelligent applications. Crafting the future through mindful code and elegant architectures.',
-  keywords: ['Software Engineer', 'AI Engineer', 'Full Stack Developer', 'React', 'Next.js', 'Python', 'Machine Learning'],
-  authors: [{ name: 'Sean' }],
+  title: 'Sean Yap | Full Stack Software Engineer',
+  description: 'Full Stack Software Engineer specializing in backend systems, AI integration, and real-time applications. Based in Petaling Jaya, Malaysia.',
+  keywords: ['Sean Yap', 'Software Engineer', 'AI Engineer', 'Full Stack Developer', 'Malaysia', 'Java', 'Spring Boot', 'Python', 'FastAPI'],
+  authors: [{ name: 'Sean Yap' }],
   openGraph: {
-    title: 'Sean | Full Stack AI Engineer',
-    description: 'Full Stack Software Engineer specializing in AI and building intelligent applications.',
-    url: 'https://sean.dev',
-    siteName: 'Sean Portfolio',
+    title: 'Sean Yap | Full Stack Software Engineer',
+    description: 'Full Stack Software Engineer specializing in backend systems, AI integration, and real-time applications.',
+    url: 'https://seanyap.dev',
+    siteName: 'Sean Yap Portfolio',
     locale: 'en_US',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Sean | Full Stack AI Engineer',
-    description: 'Full Stack Software Engineer specializing in AI and building intelligent applications.',
-    creator: '@seany99',
+    title: 'Sean Yap | Full Stack Software Engineer',
+    description: 'Full Stack Software Engineer specializing in backend systems, AI integration, and real-time applications.',
+    creator: '@seannyyap',
   },
   icons: {
     icon: [

@@ -5,8 +5,8 @@ import { Github, Linkedin, Twitter, Heart } from "lucide-react"
 
 export function Footer() {
   return (
-    <footer className="py-12 px-6 border-t border-border">
-      <div className="max-w-6xl mx-auto">
+    <footer className="py-16 border-t border-border">
+      <div className="section-container">
         <div className="flex flex-col md:flex-row items-center justify-between gap-12 py-12">
           {/* Logo & Tagline */}
           <div className="flex flex-col items-center md:items-start gap-4">
@@ -18,7 +18,7 @@ export function Footer() {
               sean<span className="text-primary">.dev</span>
             </motion.a>
             <p className="text-sm text-muted-foreground max-w-xs text-center md:text-left leading-relaxed font-medium">
-              Building intelligent digital experiences at the intersection of AI and mindful code.
+              Building intelligent digital experiences with a bias toward AI and real-time systems.
             </p>
           </div>
 
@@ -40,8 +40,8 @@ export function Footer() {
               <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-primary/70 font-bold">Social</span>
               <ul className="flex flex-col gap-2 items-center md:items-start">
                 {[
-                  { name: "GitHub", href: "https://github.com/seany99" },
-                  { name: "LinkedIn", href: "#" },
+                  { name: "GitHub", href: "https://github.com/seannyyap" },
+                  { name: "LinkedIn", href: "https://www.linkedin.com/in/yap-de-sheng-b6043824b/" },
                   { name: "Twitter", href: "#" },
                 ].map((item) => (
                   <li key={item.name}>

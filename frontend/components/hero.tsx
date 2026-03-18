@@ -5,7 +5,7 @@ import { ArrowDown, Github, Linkedin, Twitter } from "lucide-react"
 import { useEffect, useState, useMemo } from "react"
 import { MagneticButton } from "./ui/magnetic-button"
 
-const words = ["AI Applications", "Mindful Code", "Digital Harmony", "The Future"]
+const words = ["Real-Time Systems", "AI-Powered Apps", "Random Stuff", "The Future"]
 
 export function Hero() {
   const [currentWord, setCurrentWord] = useState(0)
@@ -147,7 +147,7 @@ export function Hero() {
         </svg>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 w-full flex flex-col items-center justify-center pointer-events-none">
+      <div className="section-container relative z-10 w-full flex flex-col items-center justify-center pointer-events-none">
         
         {/* Main Content - Centered */}
         <motion.div 
@@ -172,7 +172,7 @@ export function Hero() {
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }} // smooth, powerful ease out
-              className="text-6xl sm:text-7xl md:text-8xl lg:text-[7rem] font-bold tracking-tighter leading-[1.1] text-foreground"
+              className="fluid-display font-bold tracking-tighter text-foreground"
             >
               I Build
             </motion.h1>
@@ -196,7 +196,7 @@ export function Hero() {
                       duration: 0.8, 
                       ease: [0.22, 1, 0.36, 1] 
                     }}
-                    className="absolute text-5xl sm:text-6xl md:text-7xl lg:text-[6rem] font-bold text-primary tracking-tight whitespace-nowrap"
+                    className="absolute fluid-heading text-primary tracking-tight whitespace-nowrap font-bold"
                   >
                     {words[currentWord]}
                   </motion.div>
@@ -209,10 +209,10 @@ export function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, delay: 0.6, ease: "easeOut" }}
-            className="text-lg md:text-xl lg:text-2xl text-muted-foreground/90 max-w-2xl mx-auto mb-14 leading-relaxed font-medium"
+            className="fluid-subheading text-muted-foreground/90 max-w-2xl mx-auto mb-14 font-medium"
           >
-            Full Stack Software Engineer passionate about AI and creating
-            intelligent applications that push the boundaries of what&apos;s possible.
+            Full Stack Software Engineer who likes to build random stuff and see what happens.
+            Passionate about AI and creating intelligent, real-time applications.
           </motion.p>
 
           <motion.div
@@ -250,8 +250,8 @@ export function Hero() {
             className="flex items-center justify-center gap-8"
           >
             {[
-              { icon: Github, href: "https://github.com/seany99", label: "GitHub" },
-              { icon: Linkedin, href: "#", label: "LinkedIn" },
+              { icon: Github, href: "https://github.com/seannyyap", label: "GitHub" },
+              { icon: Linkedin, href: "https://www.linkedin.com/in/yap-de-sheng-b6043824b/", label: "LinkedIn" },
               { icon: Twitter, href: "#", label: "Twitter" },
             ].map(({ icon: Icon, href, label }, i) => (
               <motion.a

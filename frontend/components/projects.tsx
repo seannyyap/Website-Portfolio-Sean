@@ -60,22 +60,22 @@ export function Projects({ projects = [] }: ProjectsProps) {
   ]
 
   return (
-    <section id="projects" className="py-32 px-6 relative">
+    <section id="projects" className="py-28 md:py-36 relative">
       {/* Background */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent" />
       
-      <div className="max-w-6xl mx-auto relative z-10" ref={ref}>
+      <div className="section-container relative z-10" ref={ref}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-24 md:pl-8"
+          className="mb-20 text-center"
         >
           <span className="text-primary text-sm font-mono uppercase tracking-widest">Projects</span>
-          <h2 className="text-3xl md:text-5xl font-medium mt-6 text-balance tracking-tight">
+          <h2 className="fluid-heading font-medium mt-6 text-balance tracking-tight">
             Building Intelligent Solutions
           </h2>
-          <p className="text-muted-foreground mt-6 max-w-2xl text-lg leading-loose">
+          <p className="text-muted-foreground mt-6 max-w-2xl mx-auto fluid-subheading">
             A selection of projects that showcase my passion for AI and full-stack development.
           </p>
         </motion.div>

@@ -49,16 +49,16 @@ export function TechStack() {
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
   return (
-    <section className="py-20 px-8 md:px-6 overflow-hidden">
-      <div className="max-w-6xl mx-auto" ref={ref}>
+    <section className="py-28 md:py-36 overflow-hidden">
+      <div className="section-container" ref={ref}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          className="text-center mb-16"
         >
           <span className="text-primary text-sm font-mono uppercase tracking-widest">Tools of the Trade</span>
-          <h2 className="text-3xl md:text-4xl font-bold mt-4 text-balance">
+          <h2 className="fluid-heading font-bold mt-4 text-balance">
             My Toolkit
           </h2>
         </motion.div>
@@ -73,7 +73,7 @@ export function TechStack() {
           <div className="flex gap-4 overflow-hidden">
             <motion.div
               className="flex gap-4 shrink-0"
-              animate={{ x: [0, -1920] }}
+              animate={{ x: ["0%", "-50%"] }}
               transition={{
                 duration: 60,
                 repeat: Infinity,
@@ -104,7 +104,7 @@ export function TechStack() {
           <div className="flex gap-4 overflow-hidden mt-4">
             <motion.div
               className="flex gap-4 shrink-0"
-              animate={{ x: [-1920, 0] }}
+              animate={{ x: ["-50%", "0%"] }}
               transition={{
                 duration: 55,
                 repeat: Infinity,
