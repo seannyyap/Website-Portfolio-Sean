@@ -1,6 +1,7 @@
 import { Outfit, JetBrains_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
+import type { Metadata, Viewport } from 'next'
 
 const fontSans = Outfit({ 
   subsets: ["latin"],
@@ -12,24 +13,49 @@ const fontMono = JetBrains_Mono({
   variable: '--font-jetbrains-mono'
 });
 
+function getSiteUrl(): URL | null {
+  const raw = process.env.NEXT_PUBLIC_SITE_URL?.trim()
+  if (!raw) return null
+  try {
+    return new URL(raw)
+  } catch {
+    return null
+  }
+}
+
+const siteUrl = getSiteUrl()
+
 export const metadata: Metadata = {
   title: 'Sean Yap | Full Stack Software Engineer',
   description: 'Full Stack Software Engineer specializing in backend systems, AI integration, and real-time applications. Based in Petaling Jaya, Malaysia.',
   keywords: ['Sean Yap', 'Software Engineer', 'AI Engineer', 'Full Stack Developer', 'Malaysia', 'Java', 'Spring Boot', 'Python', 'FastAPI'],
   authors: [{ name: 'Sean Yap' }],
+  metadataBase: siteUrl ?? new URL('http://localhost:3000'),
+  alternates: {
+    canonical: siteUrl ? '/' : undefined,
+  },
   openGraph: {
     title: 'Sean Yap | Full Stack Software Engineer',
     description: 'Full Stack Software Engineer specializing in backend systems, AI integration, and real-time applications.',
-    url: 'https://seanyap.dev',
+    url: siteUrl?.toString(),
     siteName: 'Sean Yap Portfolio',
     locale: 'en_US',
     type: 'website',
+    images: [
+      {
+        url: '/opengraph-image',
+        width: 1200,
+        height: 630,
+        alt: 'Sean Yap | Full Stack Software Engineer',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Sean Yap | Full Stack Software Engineer',
     description: 'Full Stack Software Engineer specializing in backend systems, AI integration, and real-time applications.',
     creator: '@seannyyap',
+    images: ['/twitter-image'],
   },
   icons: {
     icon: [
