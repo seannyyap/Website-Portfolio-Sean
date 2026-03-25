@@ -1,12 +1,12 @@
 {
   "name": "website-portfolio-sean",
   "version": "1.0.0",
-  "description": "Full-stack portfolio website with Angular, Node.js, and MongoDB",
+  "description": "Portfolio website with Next.js and Sanity Studio",
   "scripts": {
-    "start:backend": "cd backend && npm run dev",
-    "start:frontend": "cd frontend && npm start",
-    "install:all": "cd backend && npm install && cd ../frontend && npm install",
-    "build:frontend": "cd frontend && npm run build"
+    "dev": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "start": "cd frontend && npm run start",
+    "lint": "cd frontend && npm run lint"
   },
   "author": "Sean",
   "license": "MIT",

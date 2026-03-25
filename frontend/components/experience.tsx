@@ -17,47 +17,9 @@ interface ExperienceProps {
   milestones: Milestone[]
 }
 
-const defaultMilestones = [
-  {
-    _id: "default-1",
-    year: "2021",
-    title: "Engineering at Monash",
-    description: "Began my Hons in Software Engineering. Discovered a passion for how complex systems piece together.",
-    tags: ["Monash University", "Foundations", "C/Python"],
-  },
-  {
-    _id: "default-2",
-    year: "2023",
-    title: "Research & Localization",
-    description: "Developed a BLE tracking system for my final year project. Contributed to a project accepted by Springer publications.",
-    tags: ["Embedded Systems", "MQTT", "Research"],
-  },
-  {
-    _id: "default-3",
-    year: "2024",
-    title: "The AI Expansion",
-    description: "Built the AI Interview Room, experimenting with Whisper STT, Llama 3, and WebSockets for real-time interaction.",
-    tags: ["FastAPI", "AI/ML", "Real-Time"],
-  },
-  {
-    _id: "default-4",
-    year: "Dec 2025",
-    title: "Web Plus Internship",
-    description: "Secured a role at Web Plus. Implemented RBAC security and automated alert workflows using Node.js and MongoDB.",
-    tags: ["Enterprise", "Security", "Backend"],
-  },
-  {
-    _id: "default-5",
-    year: "Mar 2026",
-    title: "Full Stack Engineer",
-    description: "Transitioned to a full-time role at Web Plus. Optimizing enterprise domain management and high-performance backend pipelines.",
-    tags: ["Spring Boot", "Oracle", "Present"],
-  },
-]
-
 export function Experience({ milestones = [] }: ExperienceProps) {
   const containerRef = useRef(null)
-  const displayMilestones = milestones.length > 0 ? milestones : defaultMilestones
+  const displayMilestones = milestones
   const [petals, setPetals] = useState<{ id: number; size: number; left: string; top: string; duration: number; delay: number; rotate: number }[]>([])
 
   useEffect(() => {
@@ -204,6 +166,14 @@ export function Experience({ milestones = [] }: ExperienceProps) {
             Growing the Tree
           </h2>
         </div>
+
+        {displayMilestones.length === 0 ? (
+          <div className="z-30 relative max-w-md mx-auto px-6 text-center">
+            <div className="rounded-3xl border border-border/40 bg-card/20 backdrop-blur-md p-8 text-muted-foreground">
+              No experience entries yet. Add them in <span className="text-foreground font-medium">/admin</span>.
+            </div>
+          </div>
+        ) : null}
 
         {/* =========================================
             MOBILE LAYOUT (BG Tree + Scroll Cards)

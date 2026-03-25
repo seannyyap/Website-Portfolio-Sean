@@ -1,13 +1,24 @@
 "use client"
 
 import { motion, useScroll, useTransform, AnimatePresence, useSpring, useMotionValue } from "framer-motion"
-import { ArrowDown, Github, Linkedin, Twitter } from "lucide-react"
+import { ArrowDown, Github, Linkedin, Twitter, Globe, Sparkles, Bot, Database } from "lucide-react"
 import { useEffect, useState, useMemo } from "react"
 import { MagneticButton } from "./ui/magnetic-button"
 
-const words = ["Real-Time Systems", "AI-Powered Apps", "Random Stuff", "The Future"]
+type SiteSettings = any
 
-export function Hero() {
+const ICONS: Record<string, any> = {
+  Github,
+  Linkedin,
+  Twitter,
+  Globe,
+  Sparkles,
+  Bot,
+  Database,
+}
+
+export function Hero({ site }: { site: SiteSettings | null }) {
+  const words: string[] = site?.hero?.rotatingWords?.length ? site.hero.rotatingWords : []
   const [currentWord, setCurrentWord] = useState(0)
   const [motes, setMotes] = useState<{ id: number; size: number; left: string; top: string; duration: number; delay: number }[]>([])
   const { scrollY } = useScroll()
@@ -43,14 +54,17 @@ export function Hero() {
     }))
     setMotes(newMotes)
 
-    const interval = setInterval(() => {
-      setCurrentWord((prev) => (prev + 1) % words.length)
-    }, 4000)
+    const interval =
+      words.length > 0
+        ? setInterval(() => {
+            setCurrentWord((prev) => (prev + 1) % words.length)
+          }, 4000)
+        : null
     return () => {
-      clearInterval(interval)
+      if (interval) clearInterval(interval)
       window.removeEventListener("mousemove", handleMouseMove)
     }
-  }, [mouseX, mouseY])
+  }, [mouseX, mouseY, words.length])
 
   // Combined transforms for mouse + scroll
   const coreX = springX
@@ -164,7 +178,9 @@ export function Hero() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
             </span>
-            <span className="text-sm font-medium tracking-wide text-foreground/90 uppercase">Available for opportunities</span>
+            <span className="text-sm font-medium tracking-wide text-foreground/90 uppercase">
+              {site?.hero?.kicker ?? ""}
+            </span>
           </motion.div>
 
           <div className="overflow-hidden mb-4">
@@ -174,7 +190,7 @@ export function Hero() {
               transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }} // smooth, powerful ease out
               className="fluid-display font-bold tracking-tighter text-foreground"
             >
-              I Build
+              {site?.hero?.headline ?? ""}
             </motion.h1>
           </div>
           
@@ -198,7 +214,7 @@ export function Hero() {
                     }}
                     className="absolute fluid-heading text-primary tracking-tight whitespace-nowrap font-bold"
                   >
-                    {words[currentWord]}
+                    {words[currentWord] ?? ""}
                   </motion.div>
                 </AnimatePresence>
               </div>
@@ -211,8 +227,7 @@ export function Hero() {
             transition={{ duration: 1.2, delay: 0.6, ease: "easeOut" }}
             className="fluid-subheading text-muted-foreground/90 max-w-2xl mx-auto mb-14 font-medium"
           >
-            Full Stack Software Engineer who likes to build random stuff and see what happens.
-            Passionate about AI and creating intelligent, real-time applications.
+            {site?.hero?.description ?? ""}
           </motion.p>
 
           <motion.div
@@ -249,25 +264,24 @@ export function Hero() {
             transition={{ duration: 1.5, delay: 1 }}
             className="flex items-center justify-center gap-8"
           >
-            {[
-              { icon: Github, href: "https://github.com/seannyyap", label: "GitHub" },
-              { icon: Linkedin, href: "https://www.linkedin.com/in/yap-de-sheng-b6043824b/", label: "LinkedIn" },
-              { icon: Twitter, href: "#", label: "Twitter" },
-            ].map(({ icon: Icon, href, label }, i) => (
+            {(site?.hero?.socialLinks ?? []).map((item: any, i: number) => {
+              const Icon = ICONS[item?.iconName] ?? Globe
+              return (
               <motion.a
-                key={label}
-                href={href}
+                key={item?.label ?? i}
+                href={item?.url}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 1 + i * 0.1 }}
                 whileHover={{ scale: 1.1, y: -4, color: "var(--primary)" }}
                 whileTap={{ scale: 0.95 }}
                 className="p-4 rounded-full bg-secondary/30 backdrop-blur-sm border border-border/50 text-muted-foreground transition-all duration-300 hover:border-primary/50 hover:bg-secondary/60"
-                aria-label={label}
+                aria-label={item?.label}
               >
                 <Icon className="w-5 h-5" />
               </motion.a>
-            ))}
+              )
+            })}
           </motion.div>
         </motion.div>
       </div>

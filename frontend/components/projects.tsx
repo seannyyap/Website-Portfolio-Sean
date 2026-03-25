@@ -14,6 +14,7 @@ interface Project {
   githubUrl?: string
   liveUrl?: string
   featured: boolean
+  iconName?: string
   image?: any
 }
 
@@ -34,30 +35,7 @@ export function Projects({ projects = [] }: ProjectsProps) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-
-  // Fallback to mock data if Sanity is empty (for dev phase)
-  const displayProjects = projects.length > 0 ? projects : [
-    {
-      _id: "mock-1",
-      title: "AI Chat Platform",
-      description: "A sophisticated conversational AI platform with multi-model support, real-time streaming, and context-aware responses. Built with RAG architecture for enhanced knowledge retrieval.",
-      tags: ["Next.js", "OpenAI", "LangChain", "Vector DB"],
-      githubUrl: "#",
-      liveUrl: "#",
-      featured: true,
-      iconName: "Bot"
-    },
-    {
-      _id: "mock-2",
-      title: "Neural Code Assistant",
-      description: "An intelligent code completion and review tool that understands context, suggests improvements, and explains complex code patterns using fine-tuned models.",
-      tags: ["Python", "Transformers", "FastAPI", "React"],
-      githubUrl: "#",
-      liveUrl: "#",
-      featured: true,
-      iconName: "Sparkles"
-    }
-  ]
+  const displayProjects = projects
 
   return (
     <section id="projects" className="py-28 md:py-36 relative">
@@ -82,6 +60,11 @@ export function Projects({ projects = [] }: ProjectsProps) {
 
         {/* Featured Projects Grid */}
         <div className="grid lg:grid-cols-2 gap-6 mb-6">
+          {displayProjects.length === 0 ? (
+            <div className="lg:col-span-2 rounded-3xl border border-border/40 bg-card/20 p-10 text-center text-muted-foreground">
+              No projects yet. Add or sync projects in <span className="text-foreground font-medium">/admin</span>.
+            </div>
+          ) : null}
           {displayProjects.filter(p => p.featured).map((project: any, index) => {
             const Icon = ICON_MAP[project.iconName] || Bot
             const imageUrl = project.image ? urlForImage(project.image).width(800).url() : null
@@ -217,15 +200,7 @@ export function Projects({ projects = [] }: ProjectsProps) {
           transition={{ duration: 0.5, delay: 0.8 }}
           className="text-center mt-12"
         >
-          <motion.a
-            href="#"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="inline-flex items-center gap-2 px-6 py-3 border border-border text-foreground rounded-full hover:border-primary/50 hover:text-primary transition-colors"
-          >
-            View All Projects
-            <ArrowUpRight className="w-4 h-4" />
-          </motion.a>
+          {/* Intentionally removed "View All" dummy link; can be re-added when a real page exists */}
         </motion.div>
       </div>
     </section>

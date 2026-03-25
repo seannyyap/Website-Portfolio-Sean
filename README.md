@@ -1,146 +1,70 @@
 # Portfolio Website - Sean
 
-A full-stack portfolio website built with **Angular**, **Node.js/Express**, and **MongoDB**.
+A modern portfolio built with **Next.js (App Router)** and **Sanity Studio**.
 
-## 🏗️ Project Structure
+## Project structure
 
 ```
 Website-Portfolio-Sean/
-├── frontend/          # Angular 19 application
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── services/    # API services
-│   │   │   ├── app.ts       # Root component
-│   │   │   ├── app.config.ts
-│   │   │   └── app.routes.ts
-│   │   ├── environments/    # Environment configs
-│   │   └── styles.scss      # Global styles
-│   └── package.json
-│
-├── backend/           # Node.js/Express API
-│   ├── src/
-│   │   ├── config/         # Database configuration
-│   │   ├── controllers/    # Route controllers
-│   │   ├── models/         # MongoDB models
-│   │   ├── routes/         # API routes
-│   │   └── server.js       # Entry point
-│   ├── .env               # Environment variables
-│   └── package.json
-│
+├── frontend/                    # Next.js app + embedded Sanity Studio (/admin)
+│   ├── app/                     # App Router pages (including /admin)
+│   ├── components/              # UI sections (Hero/About/Projects/Experience/etc)
+│   ├── sanity/                  # Sanity env + schemas + studio tools
+│   ├── sanity.config.ts         # Studio config (basePath: /admin)
+│   ├── .env.example             # Example env (safe to commit)
+│   └── .env.local               # Local env (DO NOT COMMIT)
 └── README.md
 ```
 
-## 🚀 Getting Started
-
-### Prerequisites
-
+## Prerequisites
 - **Node.js** v18+ (LTS recommended)
-- **MongoDB** (local installation or MongoDB Atlas)
-- **Angular CLI** (optional, for ng commands)
+- A **Sanity** project + dataset (create at `sanity.io/manage`)
 
-### Installation
+## Setup
 
-1. **Clone the repository**
-   ```bash
-   git clone <your-repo-url>
-   cd Website-Portfolio-Sean
-   ```
+### 1) Install dependencies
 
-2. **Install backend dependencies**
-   ```bash
-   cd backend
-   npm install
-   ```
-
-3. **Install frontend dependencies**
-   ```bash
-   cd ../frontend
-   npm install
-   ```
-
-4. **Configure environment variables**
-   
-   Edit `backend/.env` with your settings:
-   ```env
-   PORT=3000
-   NODE_ENV=development
-   MONGODB_URI=mongodb://localhost:27017/portfolio
-   FRONTEND_URL=http://localhost:4200
-   ```
-
-### Running the Application
-
-#### Start MongoDB
-Make sure MongoDB is running locally or update the connection string for MongoDB Atlas.
-
-#### Start Backend (API)
-```bash
-cd backend
-npm run dev    # Development with hot-reload
-# or
-npm start      # Production
-```
-The API will be available at `http://localhost:3000`
-
-#### Start Frontend (Angular)
 ```bash
 cd frontend
-npm start      # or: ng serve
+npm install
 ```
-The app will be available at `http://localhost:4200`
 
-## 📡 API Endpoints
+### 2) Configure env vars
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/health` | Health check |
-| GET | `/api` | API info |
-| GET | `/api/projects` | Get all projects |
-| GET | `/api/projects/:id` | Get project by ID |
-| POST | `/api/projects` | Create new project |
-| PUT | `/api/projects/:id` | Update project |
-| DELETE | `/api/projects/:id` | Delete project |
+Copy `frontend/.env.example` → `frontend/.env.local` and set:
 
-## 🛠️ Tech Stack
+```env
+NEXT_PUBLIC_SANITY_PROJECT_ID=your_project_id
+NEXT_PUBLIC_SANITY_DATASET=production
+```
 
-### Frontend
-- **Angular 19** - Modern web framework
-- **TypeScript** - Type-safe JavaScript
-- **SCSS** - CSS preprocessor
-- **RxJS** - Reactive programming
+Important:
+- `NEXT_PUBLIC_*` variables are exposed to the browser. **Never put secrets/tokens there.**
 
-### Backend
-- **Node.js** - JavaScript runtime
-- **Express.js** - Web framework
-- **MongoDB** - NoSQL database
-- **Mongoose** - MongoDB ODM
+### 3) Sanity CORS
 
-## 📝 Development Commands
+In `sanity.io/manage` → your project → **API** → **CORS origins**:
+- Add `http://localhost:3000`
+- Enable **Allow credentials / Authenticated requests**
 
-### Frontend
+## Run locally
+
 ```bash
-ng serve              # Start dev server
-ng build              # Build for production
-ng test               # Run unit tests
-ng generate component # Generate new component
+cd frontend
+npm run dev
 ```
 
-### Backend
-```bash
-npm run dev           # Start with nodemon (hot-reload)
-npm start             # Start production server
-```
+- Website: `http://localhost:3000`
+- Sanity Studio: `http://localhost:3000/admin`
 
-## 🔧 Configuration
+## Content model
 
-### Frontend Environment
-- `frontend/src/environments/environment.ts` - Development
-- `frontend/src/environments/environment.prod.ts` - Production
+Sanity document types:
+- `siteSettings`: controls Hero/About/TechStack/Contact/Footer/Navigation
+- `project`: projects list + images + links
+- `experience`: timeline entries
 
-### Backend Environment
-- `backend/.env` - Environment variables (not committed)
-- `backend/.env.example` - Template for environment variables
+## Security / secrets
 
-## 📄 License
-
-MIT License - feel free to use this project as a template for your own portfolio!
+- `.env.local` must never be committed.
+- If you ever accidentally committed a token/password, **rotate it immediately** in the provider (MongoDB Atlas / Sanity / GitHub).

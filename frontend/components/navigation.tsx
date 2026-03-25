@@ -7,18 +7,19 @@ import { Menu, X } from "lucide-react"
 import { MagneticButton } from "./ui/magnetic-button"
 import { ThemeToggle } from "./theme-toggle"
 
-const navItems = [
-  { name: "About", href: "#about" },
-  { name: "Projects", href: "#projects" },
-  { name: "Experience", href: "#experience" },
-  { name: "Contact", href: "#contact" },
-]
+type SiteSettings = any
 
-export function Navigation() {
+export function Navigation({ site }: { site: SiteSettings | null }) {
   const [hidden, setHidden] = useState(false)
   const [activeSection, setActiveSection] = useState("")
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { scrollY } = useScroll()
+  const navItems = site?.navigation?.links?.length
+    ? site.navigation.links.map((l: any) => ({ name: l.label, href: l.href }))
+    : []
+  const ctaLabel = site?.navigation?.ctaLabel ?? ""
+  const brandName = site?.brandName ?? ""
+  const brandAccent = site?.brandAccent ?? ""
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious() ?? 0
@@ -31,7 +32,7 @@ export function Navigation() {
   })
 
   useEffect(() => {
-    const sections = ["about", "projects", "experience", "contact"]
+    const sections = navItems.map((n: any) => String(n.href || "").replace(/^#/, "")).filter(Boolean)
     const observerOptions = {
       root: null,
       rootMargin: "-20% 0px -70% 0px",
@@ -46,13 +47,13 @@ export function Navigation() {
       })
     }, observerOptions)
 
-    sections.forEach((id) => {
+    sections.forEach((id: string) => {
       const element = document.getElementById(id)
       if (element) observer.observe(element)
     })
 
     return () => observer.disconnect()
-  }, [])
+  }, [navItems])
 
   return (
     <>
@@ -64,11 +65,11 @@ export function Navigation() {
       >
         <nav className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3 rounded-full bg-card/40 backdrop-blur-lg border border-border/40 transition-all duration-500">
           <motion.a
-            href="#"
+            href="#main-content"
             whileHover={{ scale: 1.02 }}
             className="text-xl font-medium text-foreground tracking-tight"
           >
-            sean<span className="text-primary">.dev</span>
+            {brandName}<span className="text-primary">{brandAccent}</span>
           </motion.a>
 
           {/* Desktop Navigation */}
@@ -103,7 +104,7 @@ export function Navigation() {
                 whileTap={{ scale: 0.95 }}
                 className="px-5 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-full hover:bg-primary/90 transition-colors block"
               >
-                Say Hello
+                {ctaLabel}
               </motion.a>
             </MagneticButton>
           </div>
@@ -146,7 +147,7 @@ export function Navigation() {
                   onClick={() => setMobileMenuOpen(false)}
                   className="block px-4 py-3 mt-2 bg-primary text-primary-foreground text-center font-medium rounded-lg"
                 >
-                  Say Hello
+                  {ctaLabel}
                 </a>
               </li>
             </ul>

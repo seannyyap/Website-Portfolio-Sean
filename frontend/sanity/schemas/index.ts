@@ -4,5 +4,6 @@
  */
 import { projectSchema } from "./project";
 import { experienceSchema } from "./experience";
+import { siteSettingsSchema } from "./siteSettings";
 
-export const schemaTypes = [projectSchema, experienceSchema];
+export const schemaTypes = [siteSettingsSchema, projectSchema, experienceSchema];

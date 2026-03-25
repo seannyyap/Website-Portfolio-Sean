@@ -4,9 +4,12 @@ import { motion, useInView } from "framer-motion"
 import { useRef, useState } from "react"
 import { ArrowUpRight, Mail, MapPin, Send } from "lucide-react"
 
-export function Contact() {
+type SiteSettings = any
+
+export function Contact({ site }: { site: SiteSettings | null }) {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
+  const contact = site?.contact
   const [formState, setFormState] = useState({
     name: "",
     email: "",
@@ -33,13 +36,14 @@ export function Contact() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="text-primary text-sm font-mono uppercase tracking-widest">Say Hello</span>
+          <span className="text-primary text-sm font-mono uppercase tracking-widest">
+            {contact?.kicker ?? ""}
+          </span>
           <h2 className="fluid-heading font-bold mt-4 text-balance">
-            Let&apos;s Connect
+            {contact?.headline ?? ""}
           </h2>
           <p className="text-muted-foreground mt-4 max-w-xl mx-auto">
-            Have a project in mind or just want to chat? 
-            I&apos;d love to hear from you.
+            {contact?.subheading ?? ""}
           </p>
         </motion.div>
 
@@ -52,17 +56,15 @@ export function Contact() {
             className="space-y-8"
           >
             <div>
-              <h3 className="text-2xl font-bold mb-4">Start a Conversation</h3>
+              <h3 className="text-2xl font-bold mb-4">{contact?.introTitle ?? ""}</h3>
               <p className="text-muted-foreground leading-relaxed">
-                Whether you&apos;re looking to build something meaningful with AI, 
-                need thoughtful technical guidance, or simply want to exchange ideas, 
-                I&apos;m always open to meaningful connections.
+                {contact?.introBody ?? ""}
               </p>
             </div>
 
             <div className="space-y-4">
               <motion.a
-                href="mailto:seanyap26899@gmail.com"
+                href={contact?.email ? `mailto:${contact.email}` : "#"}
                 whileHover={{ x: 5 }}
                 className="flex items-center gap-4 p-4 rounded-xl bg-card border border-border hover:border-primary/50 transition-colors group"
               >
@@ -71,7 +73,9 @@ export function Contact() {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Email</p>
-                  <p className="font-medium group-hover:text-primary transition-colors">seanyap26899@gmail.com</p>
+                  <p className="font-medium group-hover:text-primary transition-colors">
+                    {contact?.email ?? ""}
+                  </p>
                 </div>
                 <ArrowUpRight className="w-4 h-4 text-muted-foreground ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
               </motion.a>
@@ -85,7 +89,7 @@ export function Contact() {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Location</p>
-                  <p className="font-medium">Petaling Jaya, Malaysia</p>
+                  <p className="font-medium">{contact?.location ?? ""}</p>
                 </div>
               </motion.div>
             </div>
@@ -94,17 +98,14 @@ export function Contact() {
             <div className="pt-4">
               <p className="text-sm text-muted-foreground mb-4">Or find me on</p>
               <div className="flex gap-3">
-                {["GitHub", "LinkedIn", "Twitter"].map((platform) => (
+                {(contact?.socialLinks ?? []).map((item: any, idx: number) => (
                   <motion.a
-                    key={platform}
-                    href={
-                      platform === "GitHub" ? "https://github.com/seannyyap" :
-                      platform === "LinkedIn" ? "https://www.linkedin.com/in/yap-de-sheng-b6043824b/" : "#"
-                    }
+                    key={item?.label ?? idx}
+                    href={item?.url}
                     whileHover={{ y: -3 }}
                     className="px-4 py-2 rounded-full bg-secondary/50 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
                   >
-                    {platform}
+                    {item?.label}
                   </motion.a>
                 ))}
               </div>

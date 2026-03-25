@@ -67,6 +67,22 @@ export const projectSchema = defineType({
       description: "Show in the featured projects section",
     }),
     defineField({
+      name: "iconName",
+      title: "Icon Name",
+      type: "string",
+      initialValue: "Sparkles",
+      options: {
+        list: [
+          { title: "Bot", value: "Bot" },
+          { title: "Sparkles", value: "Sparkles" },
+          { title: "Database", value: "Database" },
+          { title: "Globe", value: "Globe" },
+        ],
+      },
+      description:
+        "Which Zen icon to display for this project. Used by the frontend Projects section.",
+    }),
+    defineField({
       name: "order",
       title: "Display Order",
       type: "number",
