@@ -56,10 +56,10 @@ export function TechStack({ site }: { site: SiteSettings | null }) {
           className="text-center mb-16"
         >
           <span className="text-primary text-sm font-mono uppercase tracking-widest">
-            {tech?.kicker ?? ""}
+            Tech Stack
           </span>
           <h2 className="fluid-heading font-bold mt-4 text-balance">
-            {tech?.headline ?? ""}
+            Tools of the Trade
           </h2>
         </motion.div>
 

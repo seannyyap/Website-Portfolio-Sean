@@ -179,7 +179,7 @@ export function Hero({ site }: { site: SiteSettings | null }) {
               <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
             </span>
             <span className="text-sm font-medium tracking-wide text-foreground/90 uppercase">
-              {site?.hero?.kicker ?? ""}
+              Available for Work
             </span>
           </motion.div>
 
@@ -190,7 +190,7 @@ export function Hero({ site }: { site: SiteSettings | null }) {
               transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }} // smooth, powerful ease out
               className="fluid-display font-bold tracking-tighter text-foreground"
             >
-              {site?.hero?.headline ?? ""}
+              Sean Yap
             </motion.h1>
           </div>
           

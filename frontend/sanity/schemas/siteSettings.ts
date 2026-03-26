@@ -26,57 +26,10 @@ export const siteSettingsSchema = defineType({
   type: "document",
   fields: [
     defineField({
-      name: "brandName",
-      title: "Brand Name",
-      type: "string",
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: "brandAccent",
-      title: "Brand Accent",
-      type: "string",
-      description: 'Small suffix like ".dev" or similar.',
-    }),
-
-    defineField({
-      name: "navigation",
-      title: "Navigation",
-      type: "object",
-      fields: [
-        defineField({
-          name: "ctaLabel",
-          title: "CTA Label",
-          type: "string",
-          initialValue: "Say Hello",
-        }),
-        defineField({
-          name: "links",
-          title: "Links",
-          type: "array",
-          of: [
-            {
-              type: "object",
-              fields: [
-                defineField({ name: "label", title: "Label", type: "string", validation: (Rule) => Rule.required() }),
-                defineField({ name: "href", title: "Href", type: "string", validation: (Rule) => Rule.required() }),
-              ],
-            },
-          ],
-        }),
-      ],
-    }),
-
-    defineField({
       name: "resume",
       title: "Resume",
       type: "object",
       fields: [
-        defineField({
-          name: "label",
-          title: "Button Label",
-          type: "string",
-          initialValue: "Resume",
-        }),
         defineField({
           name: "file",
           title: "PDF File",
@@ -93,8 +46,6 @@ export const siteSettingsSchema = defineType({
       title: "Hero",
       type: "object",
       fields: [
-        defineField({ name: "kicker", title: "Kicker", type: "string" }),
-        defineField({ name: "headline", title: "Headline", type: "string" }),
         defineField({
           name: "rotatingWords",
           title: "Rotating Words",
@@ -131,8 +82,6 @@ export const siteSettingsSchema = defineType({
       title: "About",
       type: "object",
       fields: [
-        defineField({ name: "kicker", title: "Kicker", type: "string" }),
-        defineField({ name: "headline", title: "Headline", type: "string" }),
         defineField({
           name: "bio",
           title: "Bio Paragraphs",
@@ -190,8 +139,6 @@ export const siteSettingsSchema = defineType({
       title: "Tech Stack",
       type: "object",
       fields: [
-        defineField({ name: "kicker", title: "Kicker", type: "string" }),
-        defineField({ name: "headline", title: "Headline", type: "string" }),
         defineField({
           name: "technologies",
           title: "Technologies",
@@ -221,13 +168,7 @@ export const siteSettingsSchema = defineType({
       title: "Contact",
       type: "object",
       fields: [
-        defineField({ name: "kicker", title: "Kicker", type: "string" }),
-        defineField({ name: "headline", title: "Headline", type: "string" }),
-        defineField({ name: "subheading", title: "Subheading", type: "text", rows: 2 }),
         defineField({ name: "email", title: "Email", type: "string" }),
-        defineField({ name: "location", title: "Location", type: "string" }),
-        defineField({ name: "introTitle", title: "Intro Title", type: "string" }),
-        defineField({ name: "introBody", title: "Intro Body", type: "text", rows: 3 }),
         defineField({
           name: "socialLinks",
           title: "Social Links",
@@ -250,7 +191,6 @@ export const siteSettingsSchema = defineType({
       title: "Footer",
       type: "object",
       fields: [
-        defineField({ name: "tagline", title: "Tagline", type: "text", rows: 2 }),
         defineField({
           name: "socialLinks",
           title: "Social Links",
@@ -269,10 +209,8 @@ export const siteSettingsSchema = defineType({
     }),
   ],
   preview: {
-    select: { title: "brandName" },
-    prepare({ title }) {
-      return { title: title || "Site Settings" };
+    prepare() {
+      return { title: "Site Settings" };
     },
   },
 });
-

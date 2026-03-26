@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-motion"
+import { motion, useScroll, useMotionValueEvent } from "framer-motion"
 import { useState, useEffect } from "react"
 import { Menu, X } from "lucide-react"
 
@@ -10,18 +10,18 @@ import { urlForFile } from "@/sanity/lib/file"
 
 type SiteSettings = any
 
+const NAV_ITEMS = [
+  { name: "About", href: "#about" },
+  { name: "Projects", href: "#projects" },
+  { name: "Experience", href: "#experience" },
+  { name: "Contact", href: "#contact" },
+]
+
 export function Navigation({ site }: { site: SiteSettings | null }) {
   const [hidden, setHidden] = useState(false)
   const [activeSection, setActiveSection] = useState("")
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { scrollY } = useScroll()
-  const navItems = site?.navigation?.links?.length
-    ? site.navigation.links.map((l: any) => ({ name: l.label, href: l.href }))
-    : []
-  const ctaLabel = site?.navigation?.ctaLabel ?? ""
-  const brandName = site?.brandName ?? ""
-  const brandAccent = site?.brandAccent ?? ""
-  const resumeLabel = site?.resume?.label ?? "Resume"
   const resumeUrl = urlForFile(site?.resume?.file)
 
   useMotionValueEvent(scrollY, "change", (latest) => {
@@ -35,7 +35,7 @@ export function Navigation({ site }: { site: SiteSettings | null }) {
   })
 
   useEffect(() => {
-    const sections = navItems.map((n: any) => String(n.href || "").replace(/^#/, "")).filter(Boolean)
+    const sections = NAV_ITEMS.map((n) => n.href.replace(/^#/, "")).filter(Boolean)
     const observerOptions = {
       root: null,
       rootMargin: "-20% 0px -70% 0px",
@@ -50,13 +50,13 @@ export function Navigation({ site }: { site: SiteSettings | null }) {
       })
     }, observerOptions)
 
-    sections.forEach((id: string) => {
+    sections.forEach((id) => {
       const element = document.getElementById(id)
       if (element) observer.observe(element)
     })
 
     return () => observer.disconnect()
-  }, [navItems])
+  }, [])
 
   return (
     <>
@@ -72,12 +72,12 @@ export function Navigation({ site }: { site: SiteSettings | null }) {
             whileHover={{ scale: 1.02 }}
             className="text-xl font-medium text-foreground tracking-tight"
           >
-            {brandName}<span className="text-primary">{brandAccent}</span>
+            Sean<span className="text-primary">.dev</span>
           </motion.a>
 
           {/* Desktop Navigation */}
           <ul className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => {
+            {NAV_ITEMS.map((item) => {
               const isActive = activeSection === item.href.substring(1)
               return (
                 <li key={item.name}>
@@ -105,7 +105,7 @@ export function Navigation({ site }: { site: SiteSettings | null }) {
                   whileHover={{ scale: 1.05 }}
                   className="relative px-4 py-2 text-sm transition-colors group text-muted-foreground hover:text-foreground"
                 >
-                  {resumeLabel}
+                  Resume
                   <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-primary transition-all duration-300 w-0 group-hover:w-1/2" />
                 </motion.a>
               </li>
@@ -121,7 +121,7 @@ export function Navigation({ site }: { site: SiteSettings | null }) {
                 whileTap={{ scale: 0.95 }}
                 className="px-5 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-full hover:bg-primary/90 transition-colors block"
               >
-                {ctaLabel}
+                Say Hello
               </motion.a>
             </MagneticButton>
           </div>
@@ -147,7 +147,7 @@ export function Navigation({ site }: { site: SiteSettings | null }) {
         >
           <div className="px-6 py-4 rounded-2xl bg-card/95 backdrop-blur-lg border border-border">
             <ul className="flex flex-col gap-2">
-              {navItems.map((item) => (
+              {NAV_ITEMS.map((item) => (
                 <li key={item.name}>
                   <a
                     href={item.href}
@@ -167,7 +167,7 @@ export function Navigation({ site }: { site: SiteSettings | null }) {
                     onClick={() => setMobileMenuOpen(false)}
                     className="block px-4 py-3 text-muted-foreground hover:text-foreground hover:bg-secondary/50 rounded-lg transition-colors"
                   >
-                    {resumeLabel}
+                    Resume
                   </a>
                 </li>
               ) : null}
@@ -177,7 +177,7 @@ export function Navigation({ site }: { site: SiteSettings | null }) {
                   onClick={() => setMobileMenuOpen(false)}
                   className="block px-4 py-3 mt-2 bg-primary text-primary-foreground text-center font-medium rounded-lg"
                 >
-                  {ctaLabel}
+                  Say Hello
                 </a>
               </li>
             </ul>

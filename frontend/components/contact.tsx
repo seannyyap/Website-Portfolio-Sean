@@ -18,7 +18,6 @@ export function Contact({ site }: { site: SiteSettings | null }) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Simulate successful submission
     const toast = (await import("sonner")).toast
     toast.success("Message sent! I'll get back to you soon.")
     setFormState({ name: "", email: "", message: "" })
@@ -37,13 +36,13 @@ export function Contact({ site }: { site: SiteSettings | null }) {
           className="text-center mb-16"
         >
           <span className="text-primary text-sm font-mono uppercase tracking-widest">
-            {contact?.kicker ?? ""}
+            Get In Touch
           </span>
           <h2 className="fluid-heading font-bold mt-4 text-balance">
-            {contact?.headline ?? ""}
+            Let&apos;s Work Together
           </h2>
           <p className="text-muted-foreground mt-4 max-w-xl mx-auto">
-            {contact?.subheading ?? ""}
+            Have a project in mind or just want to chat? I&apos;d love to hear from you.
           </p>
         </motion.div>
 
@@ -56,9 +55,9 @@ export function Contact({ site }: { site: SiteSettings | null }) {
             className="space-y-8"
           >
             <div>
-              <h3 className="text-2xl font-bold mb-4">{contact?.introTitle ?? ""}</h3>
+              <h3 className="text-2xl font-bold mb-4">Let&apos;s Build Something Great</h3>
               <p className="text-muted-foreground leading-relaxed">
-                {contact?.introBody ?? ""}
+                I&apos;m always open to discussing new projects, creative ideas, or opportunities to be part of your vision. Feel free to reach out!
               </p>
             </div>
 
@@ -89,7 +88,7 @@ export function Contact({ site }: { site: SiteSettings | null }) {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Location</p>
-                  <p className="font-medium">{contact?.location ?? ""}</p>
+                  <p className="font-medium">Petaling Jaya, Malaysia</p>
                 </div>
               </motion.div>
             </div>
