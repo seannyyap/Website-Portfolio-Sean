@@ -31,6 +31,10 @@ export const SITE_SETTINGS_QUERY = defineQuery(`*[_type == "siteSettings"][0]{
     ctaLabel,
     links[]{label, href}
   },
+  resume{
+    label,
+    file
+  },
   hero{
     kicker,
     headline,

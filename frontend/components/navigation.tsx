@@ -6,6 +6,7 @@ import { Menu, X } from "lucide-react"
 
 import { MagneticButton } from "./ui/magnetic-button"
 import { ThemeToggle } from "./theme-toggle"
+import { urlForFile } from "@/sanity/lib/file"
 
 type SiteSettings = any
 
@@ -20,6 +21,8 @@ export function Navigation({ site }: { site: SiteSettings | null }) {
   const ctaLabel = site?.navigation?.ctaLabel ?? ""
   const brandName = site?.brandName ?? ""
   const brandAccent = site?.brandAccent ?? ""
+  const resumeLabel = site?.resume?.label ?? "Resume"
+  const resumeUrl = urlForFile(site?.resume?.file)
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious() ?? 0
@@ -93,6 +96,20 @@ export function Navigation({ site }: { site: SiteSettings | null }) {
                 </li>
               )
             })}
+            {resumeUrl ? (
+              <li>
+                <motion.a
+                  href={resumeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.05 }}
+                  className="relative px-4 py-2 text-sm transition-colors group text-muted-foreground hover:text-foreground"
+                >
+                  {resumeLabel}
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-primary transition-all duration-300 w-0 group-hover:w-1/2" />
+                </motion.a>
+              </li>
+            ) : null}
           </ul>
 
           <div className="flex items-center gap-3">
@@ -141,6 +158,19 @@ export function Navigation({ site }: { site: SiteSettings | null }) {
                   </a>
                 </li>
               ))}
+              {resumeUrl ? (
+                <li>
+                  <a
+                    href={resumeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block px-4 py-3 text-muted-foreground hover:text-foreground hover:bg-secondary/50 rounded-lg transition-colors"
+                  >
+                    {resumeLabel}
+                  </a>
+                </li>
+              ) : null}
               <li>
                 <a
                   href="#contact"

@@ -67,6 +67,28 @@ export const siteSettingsSchema = defineType({
     }),
 
     defineField({
+      name: "resume",
+      title: "Resume",
+      type: "object",
+      fields: [
+        defineField({
+          name: "label",
+          title: "Button Label",
+          type: "string",
+          initialValue: "Resume",
+        }),
+        defineField({
+          name: "file",
+          title: "PDF File",
+          type: "file",
+          options: {
+            accept: "application/pdf",
+          },
+        }),
+      ],
+    }),
+
+    defineField({
       name: "hero",
       title: "Hero",
       type: "object",
