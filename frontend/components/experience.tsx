@@ -120,9 +120,9 @@ export function Experience({ milestones = [] }: ExperienceProps) {
     <section 
       ref={containerRef} 
       id="experience" 
-      className="relative bg-background h-[600vh] lg:h-[1000vh]"
+      className="relative bg-background h-[600svh] lg:h-[1000svh]"
     >
-      <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden">
+      <div className="sticky top-0 h-svh w-full flex flex-col items-center justify-center overflow-hidden">
         
         {/* Subtle background overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-primary/10 pointer-events-none" />
@@ -179,7 +179,7 @@ export function Experience({ milestones = [] }: ExperienceProps) {
             MOBILE LAYOUT (BG Tree + Scroll Cards)
             ========================================= */}
         <div className="lg:hidden absolute inset-0 w-full h-full flex items-center justify-center z-0 pt-32">
-           <div className="w-[300px] h-[400px] opacity-20 relative -translate-y-[10vh]">
+           <div className="w-[min(78vw,300px)] h-[min(104vw,400px)] opacity-20 relative -translate-y-[10svh]">
               <svg viewBox="0 0 400 500" fill="none" className="w-full h-full">
                  <g className="text-primary" style={{ willChange: "transform, opacity" }}>
                     <motion.path d="M200,480 C180,450 190,400 200,350 C210,300 180,250 170,200" stroke="currentColor" strokeWidth="8" strokeLinecap="round" style={{ pathLength: trunkProgress, opacity: trunkOpacity }} />
@@ -207,7 +207,7 @@ export function Experience({ milestones = [] }: ExperienceProps) {
             ========================================= */}
         <div className="hidden lg:block absolute inset-0 w-full h-full max-w-[1200px] mx-auto pointer-events-none">
            {/* The SVG Tree in the center */}
-           <div className="absolute top-[68%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[750px]">
+           <div className="absolute top-[68%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(70vw,600px)] h-[min(90vh,750px)]">
               <div className="absolute inset-0 bg-primary/5 blur-[100px] rounded-full scale-150 animate-pulse" />
               <svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full overflow-visible">
                  <g className="text-primary" style={{ willChange: "transform" }}>
@@ -257,7 +257,7 @@ export function Experience({ milestones = [] }: ExperienceProps) {
            </div>
 
            {/* The Container for Absolute Cards - Sync with SVG box for perfect alignment */}
-           <div className="absolute top-[68%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[750px] pointer-events-none">
+           <div className="absolute top-[68%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(70vw,600px)] h-[min(90vh,750px)] pointer-events-none">
               {/* M0: Year 1 (Left) - (60, 420) -> 15% left, 84% top */}
               {displayMilestones[0] && (
                 <MilestoneCard 
@@ -266,7 +266,7 @@ export function Experience({ milestones = [] }: ExperienceProps) {
                    initial={{ left: "15%", top: "84%", x: "-100%", y: "-50%" }}
                    animate={{ left: "15%", top: "84%", x: "-100%", y: "-50%" }}
                    side="left"
-                   className="absolute w-[280px] xl:w-[350px] origin-right pointer-events-auto"
+                   className="absolute w-[min(36vw,280px)] xl:w-[min(26vw,350px)] origin-right pointer-events-auto"
                 />
               )}
               {/* M1: Year 2 (Right) - (350, 320) -> 87.5% left, 64% top */}
@@ -277,7 +277,7 @@ export function Experience({ milestones = [] }: ExperienceProps) {
                    initial={{ left: "87.5%", top: "64%", x: "0%", y: "-50%" }}
                    animate={{ left: "87.5%", top: "64%", x: "0%", y: "-50%" }}
                    side="right"
-                   className="absolute w-[280px] xl:w-[350px] origin-left pointer-events-auto"
+                   className="absolute w-[min(36vw,280px)] xl:w-[min(26vw,350px)] origin-left pointer-events-auto"
                 />
               )}
               {/* M2: Year 3 (Left) - (40, 180) -> 10% left, 36% top */}
@@ -288,7 +288,7 @@ export function Experience({ milestones = [] }: ExperienceProps) {
                    initial={{ left: "10%", top: "36%", x: "-100%", y: "-50%" }}
                    animate={{ left: "10%", top: "36%", x: "-100%", y: "-50%" }}
                    side="left"
-                   className="absolute w-[280px] xl:w-[350px] origin-right pointer-events-auto"
+                   className="absolute w-[min(36vw,280px)] xl:w-[min(26vw,350px)] origin-right pointer-events-auto"
                 />
               )}
               {/* M3: Year 4 (Right) - (320, 80) -> 80% left, 16% top */}
@@ -299,7 +299,7 @@ export function Experience({ milestones = [] }: ExperienceProps) {
                    initial={{ left: "80%", top: "16%", x: "0%", y: "-50%" }}
                    animate={{ left: "80%", top: "16%", x: "0%", y: "-50%" }}
                    side="right"
-                   className="absolute w-[280px] xl:w-[350px] origin-left pointer-events-auto"
+                   className="absolute w-[min(36vw,280px)] xl:w-[min(26vw,350px)] origin-left pointer-events-auto"
                 />
               )}
               {/* M4: Present (Left) - (120, 20) -> 30% left, 4% top */}
@@ -310,7 +310,7 @@ export function Experience({ milestones = [] }: ExperienceProps) {
                    initial={{ left: "30%", top: "4%", x: "-100%", y: "-50%" }}
                    animate={{ left: "30%", top: "4%", x: "-100%", y: "-50%" }}
                    side="left"
-                   className="absolute w-[280px] xl:w-[350px] origin-right pointer-events-auto"
+                   className="absolute w-[min(36vw,280px)] xl:w-[min(26vw,350px)] origin-right pointer-events-auto"
                 />
               )}
            </div>

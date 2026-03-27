@@ -7,12 +7,17 @@ import { ExternalLink } from "@/components/ui/external-link"
 
 type SiteSettings = any
 
+const NAV_LINKS = [
+  { label: "About", href: "#about" },
+  { label: "Projects", href: "#projects" },
+  { label: "Experience", href: "#experience" },
+  { label: "Contact", href: "#contact" },
+]
+
 export function Footer({ site }: { site: SiteSettings | null }) {
-  const brandName = site?.brandName ?? ""
-  const brandAccent = site?.brandAccent ?? ""
-  const footer = site?.footer
-  const navLinks = site?.navigation?.links ?? []
-  const socialLinks = footer?.socialLinks ?? []
+  const brandName = site?.brandName?.trim() || "Sean"
+  const brandAccent = site?.brandAccent?.trim() || ".dev"
+  const socialLinks = site?.footer?.socialLinks ?? []
 
   return (
     <footer className="py-16 border-t border-border">
@@ -30,7 +35,7 @@ export function Footer({ site }: { site: SiteSettings | null }) {
               </Link>
             </motion.div>
             <p className="text-sm text-muted-foreground max-w-xs text-center md:text-left leading-relaxed font-medium">
-              {footer?.tagline ?? ""}
+              Building calm, high-impact products with care and precision.
             </p>
           </div>
 
@@ -39,10 +44,10 @@ export function Footer({ site }: { site: SiteSettings | null }) {
             <div className="flex flex-col items-center md:items-start gap-4">
               <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-primary/70 font-bold">Navigation</span>
               <ul className="flex flex-col gap-2 items-center md:items-start">
-                {navLinks.map((item: any, idx: number) => (
-                  <li key={item?.label ?? idx}>
-                    <a href={item?.href} className="text-sm text-muted-foreground hover:text-primary transition-colors font-medium">
-                      {item?.label}
+                {NAV_LINKS.map((item) => (
+                  <li key={item.label}>
+                    <a href={item.href} className="text-sm text-muted-foreground hover:text-primary transition-colors font-medium">
+                      {item.label}
                     </a>
                   </li>
                 ))}
@@ -65,7 +70,7 @@ export function Footer({ site }: { site: SiteSettings | null }) {
 
         <div className="pt-12 border-t border-border/40 flex flex-col md:flex-row items-center justify-between gap-6">
           <p className="text-xs text-muted-foreground flex items-center gap-1 font-medium italic opacity-70">
-            © {new Date().getFullYear()} {brandName}. Built with <Heart className="w-3 h-3 text-accent fill-accent" /> and Next.js.
+            © {new Date().getFullYear()} Sean Yap. Built with <Heart className="w-3 h-3 text-accent fill-accent" /> and Next.js.
           </p>
           
           <motion.a

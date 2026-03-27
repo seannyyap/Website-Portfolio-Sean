@@ -52,10 +52,10 @@ export function About({ site }: { site: SiteSettings | null }) {
           className="mb-20 text-center"
         >
           <span className="text-primary text-sm font-mono uppercase tracking-widest opacity-80">
-            {about?.kicker ?? ""}
+            About Me
           </span>
           <h2 className="fluid-heading font-light mt-6 text-balance tracking-tight">
-            {about?.headline ?? ""}
+            The Person Behind the Code
           </h2>
         </motion.div>
 

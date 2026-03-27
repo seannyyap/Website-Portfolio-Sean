@@ -25,43 +25,27 @@ export const EXPERIENCE_QUERY = defineQuery(`*[_type == "experience"] | order(or
 
 export const SITE_SETTINGS_QUERY = defineQuery(`*[_type == "siteSettings"][0]{
   _id,
-  brandName,
-  brandAccent,
-  navigation{
-    ctaLabel,
-    links[]{label, href}
+  resume{
+    file
   },
   hero{
-    kicker,
-    headline,
     rotatingWords,
     description,
     socialLinks[]{label, url, iconName}
   },
   about{
-    kicker,
-    headline,
     bio,
     skills[]{name, tag, description, iconName},
     highlights[]{title, description, iconName}
   },
   techStack{
-    kicker,
-    headline,
     technologies[]{name, category, iconName}
   },
   contact{
-    kicker,
-    headline,
-    subheading,
     email,
-    location,
-    introTitle,
-    introBody,
     socialLinks[]{label, url}
   },
   footer{
-    tagline,
     socialLinks[]{label, url}
   }
 }`);

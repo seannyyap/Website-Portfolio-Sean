@@ -72,7 +72,7 @@ export function Hero({ site }: { site: SiteSettings | null }) {
   const coreTranslateY = useTransform(coreScrollY, (v) => v + (mouseY.get() * 0.5)) // Combine scroll and mouse
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
+    <section className="relative min-h-dvh flex items-center justify-center overflow-hidden bg-background py-20 sm:py-24">
       {/* Abstract Background - Zen Motes (Particles) */}
       <div className="absolute inset-0 pointer-events-none">
         {motes.map((mote) => (
@@ -107,7 +107,7 @@ export function Hero({ site }: { site: SiteSettings | null }) {
       >
         {/* Outer Aura */}
         <motion.div
-          className="absolute w-[600px] h-[600px] md:w-[800px] md:h-[800px] rounded-full bg-primary/5 blur-[80px]"
+          className="absolute w-[min(92vw,600px)] h-[min(92vw,600px)] md:w-[min(80vw,800px)] md:h-[min(80vw,800px)] rounded-full bg-primary/5 blur-[80px]"
           animate={{
             scale: [1, 1.05, 1],
             opacity: [0.2, 0.4, 0.2],
@@ -121,7 +121,7 @@ export function Hero({ site }: { site: SiteSettings | null }) {
         />
         {/* Middle Resonance layer */}
         <motion.div
-          className="absolute w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full bg-secondary/20 blur-[60px]"
+          className="absolute w-[min(72vw,400px)] h-[min(72vw,400px)] md:w-[min(60vw,600px)] md:h-[min(60vw,600px)] rounded-full bg-secondary/20 blur-[60px]"
           animate={{
             scale: [1, 1.1, 1],
             opacity: [0.3, 0.5, 0.3],
@@ -135,7 +135,7 @@ export function Hero({ site }: { site: SiteSettings | null }) {
         />
         {/* Inner Core */}
         <motion.div
-          className="absolute w-[200px] h-[200px] md:w-[350px] md:h-[350px] rounded-full bg-accent/10 blur-[40px]"
+          className="absolute w-[min(40vw,200px)] h-[min(40vw,200px)] md:w-[min(40vw,350px)] md:h-[min(40vw,350px)] rounded-full bg-accent/10 blur-[40px]"
           animate={{
             scale: [1, 1.02, 1],
             opacity: [0.4, 0.6, 0.4],
@@ -180,7 +180,7 @@ export function Hero({ site }: { site: SiteSettings | null }) {
               <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
             </span>
             <span className="text-sm font-medium tracking-wide text-foreground/90 uppercase">
-              {site?.hero?.kicker ?? ""}
+              Available for Work
             </span>
           </motion.div>
 
@@ -191,11 +191,11 @@ export function Hero({ site }: { site: SiteSettings | null }) {
               transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }} // smooth, powerful ease out
               className="fluid-display font-bold tracking-tighter text-foreground"
             >
-              {site?.hero?.headline ?? ""}
+              Sean Yap
             </motion.h1>
           </div>
           
-          <div className="overflow-hidden mb-12 h-[80px] sm:h-[100px] md:h-[120px] lg:h-[150px] flex items-center justify-center">
+          <div className="overflow-hidden mb-12 min-h-[5.25rem] sm:min-h-[6.5rem] md:min-h-[7.5rem] lg:min-h-[9.5rem] flex items-center justify-center">
             <motion.div
                initial={{ opacity: 0 }}
                animate={{ opacity: 1 }}
@@ -213,7 +213,7 @@ export function Hero({ site }: { site: SiteSettings | null }) {
                       duration: 0.8, 
                       ease: [0.22, 1, 0.36, 1] 
                     }}
-                    className="absolute fluid-heading text-primary tracking-tight whitespace-nowrap font-bold"
+                    className="absolute fluid-heading text-primary tracking-tight whitespace-nowrap font-bold px-4"
                   >
                     {words[currentWord] ?? ""}
                   </motion.div>
@@ -242,7 +242,7 @@ export function Hero({ site }: { site: SiteSettings | null }) {
                 href="#projects"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-10 py-5 bg-primary text-primary-foreground font-medium rounded-full hover:bg-primary/90 transition-all block shadow-[0_0_40px_-10px_rgba(var(--primary),0.5)] hover:shadow-[0_0_60px_-15px_rgba(var(--primary),0.6)]"
+                className="px-7 py-4 sm:px-10 sm:py-5 bg-primary text-primary-foreground font-medium rounded-full hover:bg-primary/90 transition-all block shadow-[0_0_40px_-10px_rgba(var(--primary),0.5)] hover:shadow-[0_0_60px_-15px_rgba(var(--primary),0.6)]"
               >
                 View My Work
               </motion.a>
@@ -252,7 +252,7 @@ export function Hero({ site }: { site: SiteSettings | null }) {
                 href="#contact"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-10 py-5 bg-secondary/50 backdrop-blur-sm border border-border text-foreground font-medium rounded-full hover:bg-secondary/80 transition-all block"
+                className="px-7 py-4 sm:px-10 sm:py-5 bg-secondary/50 backdrop-blur-sm border border-border text-foreground font-medium rounded-full hover:bg-secondary/80 transition-all block"
               >
                 Get in Touch
               </motion.a>
@@ -295,7 +295,7 @@ export function Hero({ site }: { site: SiteSettings | null }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.8, duration: 2 }}
-         className="absolute bottom-8 left-1/2 -translate-x-1/2 pointer-events-auto hidden sm:block"
+         className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 pointer-events-auto hidden sm:block"
       >
         <motion.a
           href="#about"

@@ -1,16 +1,21 @@
 "use client"
 
 import { motion, useScroll, useMotionValueEvent } from "framer-motion"
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect } from "react"
 import { Menu, X } from "lucide-react"
 import Link from "next/link"
 
 import { MagneticButton } from "./ui/magnetic-button"
 import { ThemeToggle } from "./theme-toggle"
+import { urlForFile } from "@/sanity/lib/file"
+import type { SanityFileValue } from "@/sanity/lib/file"
 
 type SiteSettings = {
   brandName?: string
   brandAccent?: string
+  resume?: {
+    file?: SanityFileValue
+  }
   navigation?: {
     ctaLabel?: string
     links?: Array<{
@@ -19,31 +24,39 @@ type SiteSettings = {
     }>
   }
 }
+
 type NavItem = {
   name: string
   href: string
 }
+
+const NAV_ITEMS: NavItem[] = [
+  { name: "About", href: "#about" },
+  { name: "Projects", href: "#projects" },
+  { name: "Experience", href: "#experience" },
+  { name: "Contact", href: "#contact" },
+]
 
 export function Navigation({ site }: { site: SiteSettings | null }) {
   const [hidden, setHidden] = useState(false)
   const [activeSection, setActiveSection] = useState("")
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { scrollY } = useScroll()
-  const navItems = useMemo<NavItem[]>(
-    () =>
-      site?.navigation?.links?.length
-        ? site.navigation.links
-            .map((l) => ({
-              name: (l.label ?? "").trim(),
-              href: (l.href ?? "").trim(),
-            }))
-            .filter((item) => item.name.length > 0 && item.href.length > 0)
-        : [],
-    [site],
-  )
-  const ctaLabel = site?.navigation?.ctaLabel ?? ""
-  const brandName = site?.brandName ?? ""
-  const brandAccent = site?.brandAccent ?? ""
+
+  const navItems: NavItem[] =
+    site?.navigation?.links?.length
+      ? site.navigation.links
+          .map((l) => ({
+            name: (l.label ?? "").trim(),
+            href: (l.href ?? "").trim(),
+          }))
+          .filter((item) => item.name.length > 0 && item.href.length > 0)
+      : NAV_ITEMS
+
+  const ctaLabel = site?.navigation?.ctaLabel?.trim() || "Say Hello"
+  const brandName = site?.brandName?.trim() || "Sean"
+  const brandAccent = site?.brandAccent?.trim() || ".dev"
+  const resumeUrl = urlForFile(site?.resume?.file)
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious() ?? 0
@@ -71,7 +84,7 @@ export function Navigation({ site }: { site: SiteSettings | null }) {
       })
     }, observerOptions)
 
-    sections.forEach((id: string) => {
+    sections.forEach((id) => {
       const element = document.getElementById(id)
       if (element) observer.observe(element)
     })
@@ -97,7 +110,6 @@ export function Navigation({ site }: { site: SiteSettings | null }) {
             </Link>
           </motion.div>
 
-          {/* Desktop Navigation */}
           <ul className="hidden md:flex items-center gap-1">
             {navItems.map((item, index) => {
               const isActive = activeSection === item.href.substring(1)
@@ -118,6 +130,20 @@ export function Navigation({ site }: { site: SiteSettings | null }) {
                 </li>
               )
             })}
+            {resumeUrl ? (
+              <li>
+                <motion.a
+                  href={resumeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.05 }}
+                  className="relative px-4 py-2 text-sm transition-colors group text-muted-foreground hover:text-foreground"
+                >
+                  Resume
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-primary transition-all duration-300 w-0 group-hover:w-1/2" />
+                </motion.a>
+              </li>
+            ) : null}
           </ul>
 
           <div className="flex items-center gap-3">
@@ -134,7 +160,6 @@ export function Navigation({ site }: { site: SiteSettings | null }) {
             </MagneticButton>
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden p-2 text-foreground"
@@ -144,12 +169,11 @@ export function Navigation({ site }: { site: SiteSettings | null }) {
           </button>
         </nav>
 
-        {/* Mobile Menu */}
         <motion.div
           initial={{ opacity: 0, height: 0 }}
-          animate={{ 
-            opacity: mobileMenuOpen ? 1 : 0, 
-            height: mobileMenuOpen ? "auto" : 0 
+          animate={{
+            opacity: mobileMenuOpen ? 1 : 0,
+            height: mobileMenuOpen ? "auto" : 0,
           }}
           className="md:hidden mt-2 mx-auto max-w-6xl overflow-hidden"
         >
@@ -166,6 +190,19 @@ export function Navigation({ site }: { site: SiteSettings | null }) {
                   </a>
                 </li>
               ))}
+              {resumeUrl ? (
+                <li>
+                  <a
+                    href={resumeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block px-4 py-3 text-muted-foreground hover:text-foreground hover:bg-secondary/50 rounded-lg transition-colors"
+                  >
+                    Resume
+                  </a>
+                </li>
+              ) : null}
               <li>
                 <a
                   href="#contact"
