@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion"
 import { Heart } from "lucide-react"
+import Link from "next/link"
+import { ExternalLink } from "@/components/ui/external-link"
 
 type SiteSettings = any
 
@@ -18,14 +20,15 @@ export function Footer({ site }: { site: SiteSettings | null }) {
         <div className="flex flex-col md:flex-row items-center justify-between gap-12 py-12">
           {/* Logo & Tagline */}
           <div className="flex flex-col items-center md:items-start gap-4">
-            <motion.a
-              href="#main-content"
+            <motion.div
               whileHover={{ scale: 1.02 }}
               className="text-2xl font-bold text-foreground tracking-tighter"
             >
-              {brandName}
-              <span className="text-primary">{brandAccent}</span>
-            </motion.a>
+              <Link href="/">
+                {brandName}
+                <span className="text-primary">{brandAccent}</span>
+              </Link>
+            </motion.div>
             <p className="text-sm text-muted-foreground max-w-xs text-center md:text-left leading-relaxed font-medium">
               {footer?.tagline ?? ""}
             </p>
@@ -50,9 +53,9 @@ export function Footer({ site }: { site: SiteSettings | null }) {
               <ul className="flex flex-col gap-2 items-center md:items-start">
                 {socialLinks.map((item: any, idx: number) => (
                   <li key={item?.label ?? idx}>
-                    <a href={item?.url} className="text-sm text-muted-foreground hover:text-primary transition-colors font-medium">
+                    <ExternalLink href={item?.url} className="text-sm text-muted-foreground hover:text-primary transition-colors font-medium">
                       {item?.label}
-                    </a>
+                    </ExternalLink>
                   </li>
                 ))}
               </ul>

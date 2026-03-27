@@ -7,6 +7,9 @@ import { cn } from '@/lib/utils'
 
 // Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: '', dark: '.dark' } as const
+const SAFE_VAR_KEY = /^[a-zA-Z0-9_-]+$/
+const SAFE_COLOR =
+  /^(#[0-9a-fA-F]{3,8}|var\(--[a-zA-Z0-9_-]+\)|(?:rgb|hsl)a?\([^)]*\)|[a-zA-Z]+)$/
 
 export type ChartConfig = {
   [k in string]: {
@@ -87,10 +90,12 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
 ${prefix} [data-chart=${id}] {
 ${colorConfig
   .map(([key, itemConfig]) => {
+    const safeKey = SAFE_VAR_KEY.test(key) ? key : null
     const color =
       itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ||
       itemConfig.color
-    return color ? `  --color-${key}: ${color};` : null
+    const safeColor = color && SAFE_COLOR.test(color) ? color : null
+    return safeKey && safeColor ? `  --color-${safeKey}: ${safeColor};` : null
   })
   .join('\n')}
 }

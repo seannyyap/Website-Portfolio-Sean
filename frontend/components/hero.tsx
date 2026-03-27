@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform, AnimatePresence, useSpring, useMotionV
 import { ArrowDown, Github, Linkedin, Twitter, Globe, Sparkles, Bot, Database } from "lucide-react"
 import { useEffect, useState, useMemo } from "react"
 import { MagneticButton } from "./ui/magnetic-button"
+import { ExternalLink } from "./ui/external-link"
 
 type SiteSettings = any
 
@@ -267,19 +268,22 @@ export function Hero({ site }: { site: SiteSettings | null }) {
             {(site?.hero?.socialLinks ?? []).map((item: any, i: number) => {
               const Icon = ICONS[item?.iconName] ?? Globe
               return (
-              <motion.a
+              <motion.div
                 key={item?.label ?? i}
-                href={item?.url}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 1 + i * 0.1 }}
                 whileHover={{ scale: 1.1, y: -4, color: "var(--primary)" }}
                 whileTap={{ scale: 0.95 }}
-                className="p-4 rounded-full bg-secondary/30 backdrop-blur-sm border border-border/50 text-muted-foreground transition-all duration-300 hover:border-primary/50 hover:bg-secondary/60"
-                aria-label={item?.label}
               >
-                <Icon className="w-5 h-5" />
-              </motion.a>
+                <ExternalLink
+                  href={item?.url}
+                  className="p-4 rounded-full bg-secondary/30 backdrop-blur-sm border border-border/50 text-muted-foreground transition-all duration-300 hover:border-primary/50 hover:bg-secondary/60 block"
+                  aria-label={item?.label}
+                >
+                  <Icon className="w-5 h-5" />
+                </ExternalLink>
+              </motion.div>
               )
             })}
           </motion.div>

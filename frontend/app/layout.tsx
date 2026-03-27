@@ -24,13 +24,16 @@ function getSiteUrl(): URL | null {
 }
 
 const siteUrl = getSiteUrl()
+if (process.env.NODE_ENV === "production" && !siteUrl) {
+  throw new Error("NEXT_PUBLIC_SITE_URL must be set to a valid production URL.")
+}
 
 export const metadata: Metadata = {
   title: 'Sean Yap | Full Stack Software Engineer',
   description: 'Full Stack Software Engineer specializing in backend systems, AI integration, and real-time applications. Based in Petaling Jaya, Malaysia.',
   keywords: ['Sean Yap', 'Software Engineer', 'AI Engineer', 'Full Stack Developer', 'Malaysia', 'Java', 'Spring Boot', 'Python', 'FastAPI'],
   authors: [{ name: 'Sean Yap' }],
-  metadataBase: siteUrl ?? new URL('http://localhost:3000'),
+  metadataBase: siteUrl ?? undefined,
   alternates: {
     canonical: siteUrl ? '/' : undefined,
   },

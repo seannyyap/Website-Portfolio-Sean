@@ -2,9 +2,10 @@
 
 import { motion, useInView } from "framer-motion"
 import { useRef, useState } from "react"
-import { ArrowUpRight, Github, ExternalLink, Bot, Sparkles, Database, Globe } from "lucide-react"
+import { ArrowUpRight, Github, ExternalLink as ExternalLinkIcon, Bot, Sparkles, Database, Globe } from "lucide-react"
 import Image from "next/image"
 import { urlForImage } from "@/sanity/lib/image"
+import { ExternalLink } from "@/components/ui/external-link"
 
 interface Project {
   _id: string
@@ -88,7 +89,8 @@ export function Projects({ projects = [] }: ProjectsProps) {
                       <Image 
                         src={imageUrl} 
                         alt={project.title} 
-                        fill 
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 50vw"
                         className="object-cover group-hover:scale-[1.03] transition-transform duration-1000 ease-[0.16,1,0.3,1]"
                       />
                     </div>
@@ -126,27 +128,33 @@ export function Projects({ projects = [] }: ProjectsProps) {
                   {/* Links */}
                   <div className="flex items-center gap-4">
                     {project.githubUrl && (
-                      <motion.a
-                        href={project.githubUrl}
+                      <motion.div
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
                       >
-                        <Github className="w-4 h-4" />
-                        Code
-                      </motion.a>
+                        <ExternalLink
+                          href={project.githubUrl}
+                          className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                          <Github className="w-4 h-4" />
+                          Code
+                        </ExternalLink>
+                      </motion.div>
                     )}
                     {project.liveUrl && (
-                      <motion.a
-                        href={project.liveUrl}
+                      <motion.div
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors"
                       >
-                        <ExternalLink className="w-4 h-4" />
-                        Live Demo
-                        <ArrowUpRight className="w-3 h-3" />
-                      </motion.a>
+                        <ExternalLink
+                          href={project.liveUrl}
+                          className="flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors"
+                        >
+                          <ExternalLinkIcon className="w-4 h-4" />
+                          Live Demo
+                          <ArrowUpRight className="w-3 h-3" />
+                        </ExternalLink>
+                      </motion.div>
                     )}
                   </div>
                 </div>
@@ -178,14 +186,14 @@ export function Projects({ projects = [] }: ProjectsProps) {
                 </p>
                 <div className="flex items-center gap-4">
                   {project.githubUrl && (
-                    <a href={project.githubUrl} className="text-muted-foreground hover:text-foreground transition-colors duration-300">
+                    <ExternalLink href={project.githubUrl} className="text-muted-foreground hover:text-foreground transition-colors duration-300">
                       <Github className="w-4 h-4" />
-                    </a>
+                    </ExternalLink>
                   )}
                   {project.liveUrl && (
-                    <a href={project.liveUrl} className="text-primary/70 hover:text-primary transition-colors duration-300">
-                      <ExternalLink className="w-4 h-4" />
-                    </a>
+                    <ExternalLink href={project.liveUrl} className="text-primary/70 hover:text-primary transition-colors duration-300">
+                      <ExternalLinkIcon className="w-4 h-4" />
+                    </ExternalLink>
                   )}
                 </div>
               </motion.div>

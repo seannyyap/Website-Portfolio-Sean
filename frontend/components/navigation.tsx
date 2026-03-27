@@ -1,22 +1,46 @@
 "use client"
 
-import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-motion"
-import { useState, useEffect } from "react"
+import { motion, useScroll, useMotionValueEvent } from "framer-motion"
+import { useState, useEffect, useMemo } from "react"
 import { Menu, X } from "lucide-react"
+import Link from "next/link"
 
 import { MagneticButton } from "./ui/magnetic-button"
 import { ThemeToggle } from "./theme-toggle"
 
-type SiteSettings = any
+type SiteSettings = {
+  brandName?: string
+  brandAccent?: string
+  navigation?: {
+    ctaLabel?: string
+    links?: Array<{
+      label?: string
+      href?: string
+    }>
+  }
+}
+type NavItem = {
+  name: string
+  href: string
+}
 
 export function Navigation({ site }: { site: SiteSettings | null }) {
   const [hidden, setHidden] = useState(false)
   const [activeSection, setActiveSection] = useState("")
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { scrollY } = useScroll()
-  const navItems = site?.navigation?.links?.length
-    ? site.navigation.links.map((l: any) => ({ name: l.label, href: l.href }))
-    : []
+  const navItems = useMemo<NavItem[]>(
+    () =>
+      site?.navigation?.links?.length
+        ? site.navigation.links
+            .map((l) => ({
+              name: (l.label ?? "").trim(),
+              href: (l.href ?? "").trim(),
+            }))
+            .filter((item) => item.name.length > 0 && item.href.length > 0)
+        : [],
+    [site],
+  )
   const ctaLabel = site?.navigation?.ctaLabel ?? ""
   const brandName = site?.brandName ?? ""
   const brandAccent = site?.brandAccent ?? ""
@@ -32,7 +56,7 @@ export function Navigation({ site }: { site: SiteSettings | null }) {
   })
 
   useEffect(() => {
-    const sections = navItems.map((n: any) => String(n.href || "").replace(/^#/, "")).filter(Boolean)
+    const sections = navItems.map((n) => n.href.replace(/^#/, "")).filter(Boolean)
     const observerOptions = {
       root: null,
       rootMargin: "-20% 0px -70% 0px",
@@ -64,20 +88,21 @@ export function Navigation({ site }: { site: SiteSettings | null }) {
         className="fixed top-0 left-0 right-0 z-50 px-6 py-4"
       >
         <nav className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3 rounded-full bg-card/40 backdrop-blur-lg border border-border/40 transition-all duration-500">
-          <motion.a
-            href="#main-content"
+          <motion.div
             whileHover={{ scale: 1.02 }}
             className="text-xl font-medium text-foreground tracking-tight"
           >
-            {brandName}<span className="text-primary">{brandAccent}</span>
-          </motion.a>
+            <Link href="/">
+              {brandName}<span className="text-primary">{brandAccent}</span>
+            </Link>
+          </motion.div>
 
           {/* Desktop Navigation */}
           <ul className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => {
+            {navItems.map((item, index) => {
               const isActive = activeSection === item.href.substring(1)
               return (
-                <li key={item.name}>
+                <li key={`${item.href}-${index}`}>
                   <motion.a
                     href={item.href}
                     whileHover={{ scale: 1.05 }}
@@ -130,8 +155,8 @@ export function Navigation({ site }: { site: SiteSettings | null }) {
         >
           <div className="px-6 py-4 rounded-2xl bg-card/95 backdrop-blur-lg border border-border">
             <ul className="flex flex-col gap-2">
-              {navItems.map((item) => (
-                <li key={item.name}>
+              {navItems.map((item, index) => (
+                <li key={`${item.href}-${index}`}>
                   <a
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}

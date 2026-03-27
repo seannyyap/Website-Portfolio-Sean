@@ -3,6 +3,7 @@
 import { motion, useInView } from "framer-motion"
 import { useRef, useState } from "react"
 import { ArrowUpRight, Mail, MapPin, Send } from "lucide-react"
+import { ExternalLink } from "@/components/ui/external-link"
 
 type SiteSettings = any
 
@@ -63,22 +64,25 @@ export function Contact({ site }: { site: SiteSettings | null }) {
             </div>
 
             <div className="space-y-4">
-              <motion.a
-                href={contact?.email ? `mailto:${contact.email}` : "#"}
+              <motion.div
                 whileHover={{ x: 5 }}
-                className="flex items-center gap-4 p-4 rounded-xl bg-card border border-border hover:border-primary/50 transition-colors group"
               >
-                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                  <Mail className="w-5 h-5 text-primary" />
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Email</p>
-                  <p className="font-medium group-hover:text-primary transition-colors">
-                    {contact?.email ?? ""}
-                  </p>
-                </div>
-                <ArrowUpRight className="w-4 h-4 text-muted-foreground ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
-              </motion.a>
+                <ExternalLink
+                  href={contact?.email ? `mailto:${contact.email}` : "#"}
+                  className="flex items-center gap-4 p-4 rounded-xl bg-card border border-border hover:border-primary/50 transition-colors group"
+                >
+                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                    <Mail className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Email</p>
+                    <p className="font-medium group-hover:text-primary transition-colors">
+                      {contact?.email ?? ""}
+                    </p>
+                  </div>
+                  <ArrowUpRight className="w-4 h-4 text-muted-foreground ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                </ExternalLink>
+              </motion.div>
 
               <motion.div
                 whileHover={{ x: 5 }}
@@ -99,14 +103,17 @@ export function Contact({ site }: { site: SiteSettings | null }) {
               <p className="text-sm text-muted-foreground mb-4">Or find me on</p>
               <div className="flex gap-3">
                 {(contact?.socialLinks ?? []).map((item: any, idx: number) => (
-                  <motion.a
+                  <motion.div
                     key={item?.label ?? idx}
-                    href={item?.url}
                     whileHover={{ y: -3 }}
-                    className="px-4 py-2 rounded-full bg-secondary/50 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
                   >
-                    {item?.label}
-                  </motion.a>
+                    <ExternalLink
+                      href={item?.url}
+                      className="px-4 py-2 rounded-full bg-secondary/50 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                    >
+                      {item?.label}
+                    </ExternalLink>
+                  </motion.div>
                 ))}
               </div>
             </div>
